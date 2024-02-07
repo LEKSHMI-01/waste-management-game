@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Levels</title>
+    <style>
+        
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('levelimage.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+ 
+
+
+        #game-container {
+            text-align: center;
+        }
+
+        .level-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .level-button:hover {
+            background-color: #27ae60;
+        }
+
+        .level-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .level-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Select a Game Level</h1>
+    <div class="level-container">
+        <button class="level-button" onclick="startGame(1)">Level 1</button>
+        <button class="level-button" onclick="startGame(2)" id="level2" disabled>Level 2</button>
+        <button class="level-button" onclick="startGame(3)" id="level3" disabled>Level 3</button>
+        <button class="level-button" onclick="startGame(4)" id="level4" disabled>Level 4</button>
+    </div>
+</div>
+
+<script>
+    var unlockedLevels = 1; // Initially, only Level 1 is unlocked
+
+    function startGame(level) {
+        if (level <= unlockedLevels) {
+            // Redirect to respective level page
+            window.location.href = 'level' + level + '.html';
+        } else {
+            alert('You need to complete Level ' + (level - 1) + ' to unlock Level ' + level);
+        }
+    }
+
+    // Simulating completion of Level 1 (to be adjusted based on your actual game completion logic)
+    function completeLevel1() {
+        unlockedLevels = 2;
+        document.getElementById('level2').disabled = false;
+    }
+
+    // Simulating completion of Level 2
+    function completeLevel2() {
+        unlockedLevels = 3;
+        document.getElementById('level3').disabled = false;
+    }
+
+    // Simulating completion of Level 3
+    function completeLevel3() {
+        unlockedLevels = 4;
+        document.getElementById('level4').disabled = false;
+    }
+</script>
+
+</body>
+</html>
