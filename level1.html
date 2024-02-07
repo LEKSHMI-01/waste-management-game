@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Sorting Game - Level 1</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #9df13c5b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #game-container {
+            position: relative;
+            padding: 60px;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            border: 1px solid #000;
+            margin: 20px auto;
+            display: flex;
+            background-color: #fff;
+            background-image: url('Images/LogoR.png');
+            background-size: 500px;
+            background-repeat: no-repeat;
+            background-position: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+       
+
+        #waste-list {
+            flex: 1;
+            padding: 45px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* 4 columns */
+            grid-gap: 20px 4px;
+            /* Adjusted gap between images */
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #0c461fce;
+            /* Added border for the waste images box */
+            border-radius: 10px;
+            /* Added border radius for a rounded look */
+        }
+
+        .bin-container {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #0c461fce;
+            border-radius: 10px;
+            justify-content: space-around;
+            padding: 20px;
+            margin-left: 15px;
+        }
+
+        .bin-image {
+            width: 200px;
+            /* Adjust the size of the bin images */
+            height: auto;
+        }
+
+        .waste-item {
+            width: 150px;
+            height: 150px;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .waste-item:hover {
+            border-color: #3498db;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-container">
+        <div id="waste-list">
+            <img id="waste1" src="Images/l1plastic bottle.jpg" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="recyclable" title="Plastic Bottle">
+            <img id="waste2" src="Images/l1broken glass.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="non-recyclable" title="Broken Glass">
+            <img id="waste3" src="Images/l1glass1.png" class="waste-item" draggable="true" ondragstart="drag(event)"
+                data-type="recyclable" title="Glass">
+            <img id="waste4" src="Images/l1bubble wrap 2.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="non-recyclable" title="Bubble Wrap">
+            <!-- Add more waste items as needed -->
+            <img id="waste5" src="Images/l1pvc1.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
+                data-type="recyclable" title="PVC">
+            <img id="waste6" src="Images/l1newspaper.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
+                data-type="recyclable" title="Newspaper">
+            <img id="waste7" src="Images/l1cigarette butts.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="non-recyclable" title="Cigarette Butts">
+            <img id="waste8" src="Images/l1battery2.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
+                data-type="recyclable" title="Battery">
+            <!-- Add more waste items as needed -->
+            <img id="waste9" src="Images/l1can1.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
+                data-type="recyclable" title="Can">
+            <img id="waste10" src="Images/l1tetra pack.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="non-recyclable" title="Tetra Pack">
+            <img id="waste11" src="Images/l1carbon paper.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="non-recyclable" title="Carbon Paper">
+            <img id="waste12" src="Images/l1carboard package.jfif" class="waste-item" draggable="true"
+                ondragstart="drag(event)" data-type="recyclable" title="Cardboard Package">
+            <!-- Add more waste items as needed -->
+        </div>
+        <div class="bin-container">
+            <img id="recyclable-bin" src="Images/l1recycl.png" class="bin-image" ondrop="drop(event)"
+                ondragover="allowDrop(event)" data-type="recyclable">
+            <img id="non-recyclable-bin" src="Images/l1nonrecycl.png" class="bin-image" ondrop="drop(event)"
+                ondragover="allowDrop(event)" data-type="non-recyclable">
+        </div>
+    </div>
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+            event.dataTransfer.setData("type", event.target.dataset.type);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const draggedElementId = event.dataTransfer.getData("text");
+            const draggedElementType = event.dataTransfer.getData("type");
+            const binType = event.target.dataset.type;
+
+            let message;
+            if (draggedElementType === binType) {
+                message = `Correct! You dropped the waste in the ${binType} bin.`;
+                // Remove the dropped waste item from the waste list
+                const droppedElement = document.getElementById(draggedElementId);
+                droppedElement.parentNode.removeChild(droppedElement);
+                // Check if all waste items are sorted
+                if (document.querySelectorAll('.waste-item').length === 0) {
+                    // Redirect to Completed.html after a delay
+                    setTimeout(() => {
+                        window.location.href = 'Completed.html';
+                    }, 3000);
+                }
+            } else {
+                message = `Oops! The waste should be dropped in the ${!binType} bin.`;
+            }
+
+            // Updated to show a popup message inside the window
+            const popup = document.createElement('div');
+            popup.textContent = message;
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            popup.style.padding = '20px';
+            popup.style.border = '1px solid #000';
+            popup.style.borderRadius = '10px';
+            document.body.appendChild(popup);
+
+            // Remove popup after 2 seconds
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
