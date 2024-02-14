@@ -83,6 +83,21 @@
         .waste-item:hover {
             border-color: #3498db;
         }
+
+        .bin-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 5px;
+            
+        }
+
+        .recyclable-label {
+            color: green;
+        }
+
+        .non-recyclable-label {
+            color: red;
+        }
     </style>
 </head>
 
@@ -120,8 +135,11 @@
         <div class="bin-container">
             <img id="recyclable-bin" src="Images/l1recycl.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="recyclable">
+            <label for="recyclable-bin" class="bin-label recyclable-label">Recyclable</label>
+            
             <img id="non-recyclable-bin" src="Images/l1nonrecycl.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="non-recyclable">
+            <label for="non-recyclable-bin" class="bin-label non-recyclable-label">Non-Recyclable</label>
         </div>
     </div>
     <script>
