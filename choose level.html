@@ -11,6 +11,8 @@
             font-family: 'Trebuchet MS', sans-serif;
             background: url('Images/levello.jpg') no-repeat center center fixed;
             background-size: cover;
+            background-color: rgba(0, 0, 0, 0.7);
+            background-blend-mode: darken;
             margin: 0;
             padding: 0;
             display: flex;
@@ -79,7 +81,8 @@
     function startGame(level) {
         if (level <= unlockedLevels) {
             // Redirect to respective level page
-            window.location.href = 'level' + level + '.html';
+            // window.location.href = 'level' + level + '.html';
+            window.location.href = 'leveloneindro.html';
         } else {
             alert('You need to complete Level ' + (level - 1) + ' to unlock Level ' + level);
         }

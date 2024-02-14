@@ -9,6 +9,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: #9df13c5b;
+            background-blend-mode: darken;
             margin: 0;
             padding: 0;
             display: flex;
@@ -159,7 +160,7 @@
 
             let message;
             if (draggedElementType === binType) {
-                message = `Correct! You dropped the waste in the ${binType} bin.`;
+                message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
                 // Remove the dropped waste item from the waste list
                 const droppedElement = document.getElementById(draggedElementId);
                 droppedElement.parentNode.removeChild(droppedElement);
@@ -171,7 +172,7 @@
                     }, 3000);
                 }
             } else {
-                message = `Oops! The waste should be dropped in the ${!binType} bin.`;
+                message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
             }
 
             // Updated to show a popup message inside the window
