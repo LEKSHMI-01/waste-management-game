@@ -142,81 +142,94 @@
     <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image" ondrop="drop(event)"
         ondragover="allowDrop(event)" data-type="non-recyclable" alt="Non-Recyclable Bin">
 
-    <script>
-        let countdown = 60; // Initial countdown time in seconds
-        let score = 0; // Initial score
-
-        // Function to update the countdown timer
-        function updateTimer() {
-            countdown--;
-            document.getElementById('countdown').textContent = countdown;
-            if (countdown <= 0) {
-                clearInterval(timerInterval); // Stop the timer when it reaches 0
-                alert('Time is up! Game over. Your score is ' + score);
-            }
-        }
-
-        // Function to update the score
-        function updateScore() {
-            score += 10; // Increase score by 10 for each correct placement
-            document.getElementById('score-value').textContent = score;
-        }
-
-        // Timer interval that calls updateTimer every second
-        const timerInterval = setInterval(updateTimer, 1000);
-
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        function drag(event) {
-            event.dataTransfer.setData("text", event.target.id);
-            event.dataTransfer.setData("type", event.target.dataset.type);
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            const draggedElementId = event.dataTransfer.getData("text");
-            const draggedElementType = event.dataTransfer.getData("type");
-            const binType = event.target.dataset.type;
-
-            let message;
-            if (draggedElementType === binType) {
-                message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
-                updateScore(); // Update the score
-                // Remove the dropped waste item from the DOM
-                const droppedElement = document.getElementById(draggedElementId);
-                droppedElement.parentNode.removeChild(droppedElement);
-                // Check if all waste items are sorted
-                if (document.querySelectorAll('.waste-item').length === 0) {
-                    // Redirect to Completed.html after a delay
-                    setTimeout(() => {
-                        window.location.href = 'Completed.html';
-                    }, 3000);
+        <script>
+            let countdown = 60; // Initial countdown time in seconds
+            let score = 0; // Initial score
+        
+            // Function to update the countdown timer
+            function updateTimer() {
+                countdown--;
+                document.getElementById('countdown').textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(timerInterval); // Stop the timer when it reaches 0
+                    if (score >= 30) {
+                        alert('Time is up! You completed the level!'); // Go to the next level alert
+                        // Redirect to the next level (you need to define the URL)
+                        // window.location.href = 'NextLevel.html';
+                    } else {
+                        alert('Time is up! Try again. Your score is ' + score); // Try again alert
+                    }
                 }
-            } else {
-                message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
             }
-
-            // Updated to show a popup message inside the window
-            const popup = document.createElement('div');
-            popup.textContent = message;
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-            popup.style.padding = '20px';
-            popup.style.border = '1px solid #000';
-            popup.style.borderRadius = '10px';
-            document.body.appendChild(popup);
-
-            // Remove popup after 2 seconds
-            setTimeout(() => {
-                popup.remove();
-            }, 3000);
-        }
-    </script>
+        
+            // Function to update the score
+            function updateScore() {
+                score += 10; // Increase score by 10 for each correct placement
+                document.getElementById('score-value').textContent = score;
+        
+                if (score >= 30) {
+                    clearInterval(timerInterval); // Stop the timer when the score reaches 50
+                    alert('Congratulations! You reached a score of 30. Proceeding to the next level!');
+                    // Redirect to the next level (you need to define the URL)
+                    // window.location.href = 'NextLevel.html';
+                }
+            }
+        
+            // Timer interval that calls updateTimer every second
+            const timerInterval = setInterval(updateTimer, 1000);
+        
+            function allowDrop(event) {
+                event.preventDefault();
+            }
+        
+            function drag(event) {
+                event.dataTransfer.setData("text", event.target.id);
+                event.dataTransfer.setData("type", event.target.dataset.type);
+            }
+        
+            function drop(event) {
+                event.preventDefault();
+                const draggedElementId = event.dataTransfer.getData("text");
+                const draggedElementType = event.dataTransfer.getData("type");
+                const binType = event.target.dataset.type;
+        
+                let message;
+                if (draggedElementType === binType) {
+                    message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
+                    updateScore(); // Update the score
+                    // Remove the dropped waste item from the DOM
+                    const droppedElement = document.getElementById(draggedElementId);
+                    droppedElement.parentNode.removeChild(droppedElement);
+                    // Check if all waste items are sorted
+                    if (document.querySelectorAll('.waste-item').length === 0) {
+                        // Redirect to Completed.html after a delay
+                        setTimeout(() => {
+                            window.location.href = 'Completed.html';
+                        }, 3000);
+                    }
+                } else {
+                    message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
+                }
+        
+                // Updated to show a popup message inside the window
+                const popup = document.createElement('div');
+                popup.textContent = message;
+                popup.style.position = 'fixed';
+                popup.style.top = '50%';
+                popup.style.left = '50%';
+                popup.style.transform = 'translate(-50%, -50%)';
+                popup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                popup.style.padding = '20px';
+                popup.style.border = '1px solid #000';
+                popup.style.borderRadius = '10px';
+                document.body.appendChild(popup);
+        
+                // Remove popup after 2 seconds
+                setTimeout(() => {
+                    popup.remove();
+                }, 3000);
+            }
+        </script>
 </body>
 
 </html>
