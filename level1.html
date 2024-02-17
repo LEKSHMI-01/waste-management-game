@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waste Sorting Game - Level 1</title>
+    <script src="choose level.html"></script>
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -124,6 +126,7 @@
                 ondragover="allowDrop(event)" data-type="non-recyclable">
         </div>
     </div>
+    
     <script>
         function allowDrop(event) {
             event.preventDefault();
@@ -148,10 +151,15 @@
                 droppedElement.parentNode.removeChild(droppedElement);
                 // Check if all waste items are sorted
                 if (document.querySelectorAll('.waste-item').length === 0) {
+                    
+                   
                     // Redirect to Completed.html after a delay
                     setTimeout(() => {
-                        window.location.href = 'Completed.html';
+                        window.location.href = '1complete.html';
                     }, 3000);
+                   
+
+                     
                 }
             } else {
                 message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;

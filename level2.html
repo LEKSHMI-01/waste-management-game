@@ -164,16 +164,12 @@
             const binType = event.target.dataset.type;
 
             let message;
-            let imageSrc;
-
             if (draggedElementType === binType) {
-                //message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
-                imageSrc = 'Images/Level 2/10.png';
+                message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
                 updateScore(); // Update the score
                 // Remove the dropped waste item from the DOM
                 const droppedElement = document.getElementById(draggedElementId);
                 droppedElement.parentNode.removeChild(droppedElement);
-
                 // Check if all waste items are sorted
                 if (document.querySelectorAll('.waste-item').length === 0) {
                     // Redirect to Completed.html after a delay
@@ -182,12 +178,11 @@
                     }, 3000);
                 }
             } else {
-                //message = `Oops! The waste has been dropped in the ${binType} bin 😒.`;
-                imageSrc = 'Images/Level 2/sad.png';
+                message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
             }
 
-            // Show message
-            /*const popup = document.createElement('div');
+            // Updated to show a popup message inside the window
+            const popup = document.createElement('div');
             popup.textContent = message;
             popup.style.position = 'fixed';
             popup.style.top = '50%';
@@ -197,26 +192,12 @@
             popup.style.padding = '20px';
             popup.style.border = '1px solid #000';
             popup.style.borderRadius = '10px';
-            document.body.appendChild(popup);*/
+            document.body.appendChild(popup);
 
-            // Show image
-            const image = document.createElement('img');
-            image.src = imageSrc;
-            image.style.position = 'fixed';
-            image.style.top = '60%';
-            image.style.left = '50%';
-            image.style.transform = 'translate(-50%, -50%)';
-            image.style.width = '100px';
-            image.style.height = '100px';
-            document.body.appendChild(image);
-
-            // Remove popup and image after 2 seconds
+            // Remove popup after 2 seconds
             setTimeout(() => {
-                //popup.remove();
-                image.remove();
-            }, 2000);
-
-
+                popup.remove();
+            }, 3000);
         }
     </script>
 </body>
