@@ -85,21 +85,6 @@
         .waste-item:hover {
             border-color: #3498db;
         }
-
-        .bin-label {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 5px;
-            
-        }
-
-        .recyclable-label {
-            color: green;
-        }
-
-        .non-recyclable-label {
-            color: red;
-        }
     </style>
 </head>
 
@@ -114,7 +99,7 @@
                 data-type="recyclable" title="Glass">
             <img id="waste4" src="Images/l1bubble wrap 2.jfif" class="waste-item" draggable="true"
                 ondragstart="drag(event)" data-type="non-recyclable" title="Bubble Wrap">
-            <!-- Add more waste items as needed          -->
+            <!-- Add more waste items as needed -->
             <img id="waste5" src="Images/l1pvc1.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
                 data-type="recyclable" title="PVC">
             <img id="waste6" src="Images/l1newspaper.jfif" class="waste-item" draggable="true" ondragstart="drag(event)"
@@ -137,11 +122,8 @@
         <div class="bin-container">
             <img id="recyclable-bin" src="Images/l1recycl.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="recyclable">
-            <label for="recyclable-bin" class="bin-label recyclable-label">Recyclable</label>
-            
-            <img id="non-recyclable-bin" src="Images/l1nonrecycl.png" class="bin-image" ondrop="drop(event)"
+            <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="non-recyclable">
-            <label for="non-recyclable-bin" class="bin-label non-recyclable-label">Non-Recyclable</label>
         </div>
     </div>
     
@@ -183,7 +165,6 @@
                 message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
             }
 
-            // Updated to show a popup message inside the window
             const popup = document.createElement('div');
             popup.textContent = message;
             popup.style.position = 'fixed';
@@ -195,8 +176,6 @@
             popup.style.border = '1px solid #000';
             popup.style.borderRadius = '10px';
             document.body.appendChild(popup);
-
-            // Remove popup after 2 seconds
             setTimeout(() => {
                 popup.remove();
             }, 3000);
