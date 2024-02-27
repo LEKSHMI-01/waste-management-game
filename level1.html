@@ -5,13 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waste Sorting Game - Level 1</title>
-    <script src="choose level.html"></script>
-
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #9df13c5b;
-            background-blend-mode: darken;
             margin: 0;
             padding: 0;
             display: flex;
@@ -85,6 +82,21 @@
         .waste-item:hover {
             border-color: #3498db;
         }
+
+        .bin-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 5px;
+            
+        }
+
+        .recyclable-label {
+            color: green;
+        }
+
+        .non-recyclable-label {
+            color: red;
+        }
     </style>
 </head>
 
@@ -122,11 +134,13 @@
         <div class="bin-container">
             <img id="recyclable-bin" src="Images/l1recycl.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="recyclable">
-            <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image" ondrop="drop(event)"
+            <label for="recyclable-bin" class="bin-label recyclable-label">Recyclable</label>
+            
+            <img id="non-recyclable-bin" src="Images/l1nonrecycl.png" class="bin-image" ondrop="drop(event)"
                 ondragover="allowDrop(event)" data-type="non-recyclable">
+            <label for="non-recyclable-bin" class="bin-label non-recyclable-label">Non-Recyclable</label>
         </div>
     </div>
-    
     <script>
         function allowDrop(event) {
             event.preventDefault();
@@ -145,26 +159,22 @@
 
             let message;
             if (draggedElementType === binType) {
-                message = `Correct! You dropped the waste in the ${binType} bin 😎.`;
+                message = `Correct! You dropped the waste in the ${binType} bin.`;
                 // Remove the dropped waste item from the waste list
                 const droppedElement = document.getElementById(draggedElementId);
                 droppedElement.parentNode.removeChild(droppedElement);
                 // Check if all waste items are sorted
                 if (document.querySelectorAll('.waste-item').length === 0) {
-                    
-                   
                     // Redirect to Completed.html after a delay
                     setTimeout(() => {
-                        window.location.href = '1complete.html';
+                        window.location.href = 'Completed.html';
                     }, 3000);
-                   
-
-                     
                 }
             } else {
-                message = `Oops! The waste has been dropped in the ${!binType} bin 😒.`;
+                message = `Oops! The waste should be dropped in the ${!binType} bin.`;
             }
 
+            // Updated to show a popup message inside the window
             const popup = document.createElement('div');
             popup.textContent = message;
             popup.style.position = 'fixed';
@@ -176,6 +186,8 @@
             popup.style.border = '1px solid #000';
             popup.style.borderRadius = '10px';
             document.body.appendChild(popup);
+
+            // Remove popup after 2 seconds
             setTimeout(() => {
                 popup.remove();
             }, 3000);
