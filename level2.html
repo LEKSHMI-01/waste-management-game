@@ -136,31 +136,30 @@
                 if (countdown <= 0) {
                     clearInterval(timerInterval); // Stop the timer when it reaches 0
                     if (score >= 80) {
-                        alert('Time is up! Congratulations! You completed Level 2. Your score is ' + score);
+                        //alert('Time is up! Congratulations! You completed Level 2. Your score is ' + score);
                         // Redirect to Complete1.html after a delay
-                        setTimeout(() => {
-                            window.location.href = '2complete.html';
-                        }, 3000);
+                        window.location.href = '2congratulations.html?score=' + score;
+                        //setTimeout(() => {
+                        //    window.location.href = '2complete.html';
+                        //}, 3000);
                     } else {
-                        alert('Time is up! Try again. Your score is ' + score);
+                        //alert('Time is up! Try again. Your score is ' + score);
+                        window.location.href = '2try_again.html?score=' + score;
                     }
                 }
             }
         
             // Function to update the score
             function updateScore() {
-                score += 10; // Increase score by 10 for each correct placement
-                document.getElementById('score-value').textContent = score;
-        
-                if (score >= 80) {
-                    clearInterval(timerInterval); // Stop the timer when the score reaches 80
-                    alert('Congratulations! You reached a score of 80. Proceeding to the next level!');
-                    // Redirect to Complete1.html after a delay
-                    setTimeout(() => {
-                        window.location.href = '2complete.html';
-                    }, 3000);
-                }
+            score += 10; // Increase score by 10 for each correct placement
+            document.getElementById('score-value').textContent = score;
+
+            if (score >= 80) {
+                clearInterval(timerInterval); // Stop the timer when the score reaches 80
+                // Redirect to the score page for successful completion
+                window.location.href = '2congratulations.html?score=' + score;
             }
+        }
         
             // Timer interval that calls updateTimer every second
             const timerInterval = setInterval(updateTimer, 1000);

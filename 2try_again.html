@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try Again</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background-image: url('Images/Level 2/tryagain.png');
+            background-size: cover;
+            background-color: #0e0d0d47;
+            background-blend-mode: darken;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #c1c1c1;
+            margin-bottom: 30px;
+        }
+
+        .score {
+            font-size: 20px;
+            color: #eadda7;
+            font-weight: bolder;
+        }
+
+        .try-again-button {
+            background-color: #d92809;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Trebuchet MS', Arial, sans-serif;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .try-again-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <div class="container">
+        <h1>TRY AGAIN!</h1>
+        <p>Unfortunately, you didn't score enough points to proceed to the next level.</p>
+
+        <p class="score">Your score: <span id="score"></span></p>
+
+        <button class="try-again-button">Try Again</button>
+    </div>
+
+    <script>
+        // JavaScript code to retrieve and display the score from the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = urlParams.get('score');
+        document.getElementById('score').innerText = score;
+
+        // Redirect to level2.html when Try Again button is clicked
+        document.querySelector('.try-again-button').addEventListener('click', function () {
+            window.location.href = 'level2.html';
+        });
+    </script>
+</body>
+
+</html>
