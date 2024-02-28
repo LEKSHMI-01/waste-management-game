@@ -97,17 +97,19 @@
     <div class="center">
       <h1>Level Completed!</h1>
       <p>Congratulations on completing the level 1!</p>
-      <button onclick="continueToNextLevel()">Continue</button>
+      <button id="continueButton" onclick="continueToNextLevel()">Continue</button>
       <div class="popper-container"></div>
     </div>
   </div>
   <script>
 
     function continueToNextLevel() {
-      window.location.href = 'choose level.html';
+      window.location.href = 'choose level.html?level1=completed';
+      document.getElementById('level2').disabled = false;
+     
     }
     // Call the completeLevel1 function to update the unlockedLevels variable
-    completeLevel1();
+    //completeLevel1();
 
   </script>
 </body>

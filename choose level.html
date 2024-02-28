@@ -65,11 +65,11 @@
 </head>
 <body>
 
-<div id="game-container">
+<div id="game-container"
     <h1>Choose Game Level</h1>
     <div class="level-container">
         <button class="level-button" onclick="startGame(1)">Level 1</button>
-        <button class="level-button" onclick="startGame(2)" id="level2" disabled>Level 2</button>
+        <button class="level-button" onclick="startLevel2()" id="level2" disabled>Level 2</button>
         <button class="level-button" onclick="startGame(3)" id="level3" disabled>Level 3</button>
         <button class="level-button" onclick="startGame(4)" id="level4" disabled>Level 4</button>
     </div>
@@ -77,6 +77,12 @@
 
 <script>
     var unlockedLevels = 1; // Initially, only Level 1 is unlocked
+    const urlParams=new URLSearchParams(window.location.search);
+    const myparam=urlParams.get('level1');
+
+    console.log(myparam)
+    
+    if (myparam === 'completed') completeLevel1()
 
     function startGame(level) {
         if (level <= unlockedLevels) {
@@ -94,6 +100,10 @@
         
 
         document.getElementById('level2').disabled = false;
+    }
+    function startLevel2() {
+        // Redirect to Level 2 page
+        window.location.href = 'level2.html';
     }
 
     // Simulating completion of Level 2
