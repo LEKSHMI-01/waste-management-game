@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Quiz</title>
+    <style>
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 400px;
+            max-width: 80%;
+            height: 300px;
+            max-height: 80%;
+            overflow: auto;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Question styles */
+        .question {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        /* Answer styles */
+        .answer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .answer label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Set a fixed width */
+        }
+
+        .answer label:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Selected answer style */
+        .answer input:checked + label {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        /* Incorrect answer style */
+        .answer input:checked + label.wrong {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Button styles */
+        .btn {
+            margin-top: 20px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2196f3;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="popup" class="popup">
+        <div id="question" class="question"></div>
+        <div id="answers" class="answer"></div>
+        <button id="nextBtn" class="btn">Next</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the purpose of recycling waste?",
+                answers: ["To reduce landfill waste and conserve natural resources","To increase pollution and waste production","To save money for waste management companies","To generate more waste for incineration"],
+                correctAnswer: "To reduce landfill waste and conserve natural resources"
+            },
+            {
+                question: "Which of the following materials is typically recyclable?",
+                answers: ["Styrofoamt", "Plastic bottles", "Bubble wrap","Food scraps"],
+                correctAnswer: "Plastic bottles"
+            },
+            {
+                question: "What should you do with broken glass?",
+                answers: ["Recycle it", "Throw it in the trash bin", "Compost it","Reuse it for drinking"],
+                correctAnswer: "Throw it in the trash bin" 
+            },
+            {
+                question: "Which bin should cigarette butts be disposed of in?",
+                answers: ["Recyclable bin", "Compost bin", "Non-recyclable bin", "Hazardous waste bin"],
+                correctAnswer: "Non-recyclable bin" 
+            },
+            {
+                question: "What can be done to reduce waste generation?",
+                answers: ["Buying single-use items", "Increasing packaging materials", "Reusing products whenever possible","Ignoring recycling practices"],
+                correctAnswer: "Reusing products whenever possible" 
+            },
+            {
+                question: "What is the purpose of recycling paper?",
+                answers: ["To increase waste production", "To conserve natural resources", "To contaminate recycling streams","To promote deforestation"],
+                correctAnswer: "To conserve natural resources" 
+            },
+            {
+                question: "Which of the following items is considered non-recyclable in most recycling programs?",
+                answers: ["Glass jars", "Aluminum foil", "Plastic bags","Steel cans"],
+                correctAnswer: "Plastic bags" 
+            },
+            {
+                question: "What should you do with an empty aluminum soda can?",
+                answers: ["Throw it in the regular trash bin", "Recycle it in a designated recycling bin", "Compost it in your backyard","Reuse it for storing food"],
+                correctAnswer: "Recycle it in a designated recycling bin" 
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('question').textContent = currentQuestion.question;
+            const answersDiv = document.getElementById('answers');
+            answersDiv.innerHTML = '';
+            currentQuestion.answers.forEach((answer, index) => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'answer';
+                input.value = answer;
+                input.dataset.correct = currentQuestion.correctAnswer;
+                input.addEventListener('change', function () {
+                    checkAnswer(this);
+                });
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(answer));
+                answersDiv.appendChild(label);
+            });
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const correctAnswer = selectedAnswer.dataset.correct;
+            const radioButtons = document.querySelectorAll('input[name="answer"]');
+            radioButtons.forEach(radioButton => {
+        const isCorrect = radioButton.value === correctAnswer;
+        const isSelected = radioButton === selectedAnswer;
+        const label = radioButton.parentNode;
+
+        if (isCorrect && isSelected) {
+            label.style.backgroundColor = '#4caf50'; // Green for correct and selected answer
+        } else if (!isCorrect && isSelected) {
+            label.style.backgroundColor = '#f44336'; // Red for wrong and selected answer
+        } else {
+            label.style.backgroundColor = ''; // Reset other options
+        }
+    });
+}
+
+
+        function showNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                alert('Quiz completed!');
+                document.getElementById('popup').style.display = 'none';
+            }
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', function () {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (!selectedAnswer) {
+                alert('Please select an answer.');
+                return;
+            }
+
+            if (selectedAnswer.value === selectedAnswer.dataset.correct) {
+                showNextQuestion();
+            } else {
+                checkAnswer(selectedAnswer);
+            }
+        });
+
+        // Show the first question
+        showQuestion();
+        document.getElementById('popup').style.display = 'block';
+    </script>
+</body>
+
+</html>
