@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popup Quiz</title>
     <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background-image: url('Images/quizimage.jpg');
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.708);
+            background-blend-mode: darken;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
         /* Popup styles */
         .popup {
             display: none;
@@ -187,6 +201,7 @@
             } else {
                 alert('Quiz completed!');
                 document.getElementById('popup').style.display = 'none';
+                window.location.href = '2congratulations.html';
             }
         }
 
