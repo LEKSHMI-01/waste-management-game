@@ -138,10 +138,10 @@
                     if (score >= 80) {
                         //alert('Time is up! Congratulations! You completed Level 2. Your score is ' + score);
                         // Redirect to Complete1.html after a delay
-                        window.location.href = 'quizpage.html?score=' + score;
-                        //setTimeout(() => {
-                        //    window.location.href = '2complete.html';
-                        //}, 3000);
+                        
+                        setTimeout(() => {
+                            window.location.href = '2congratulations.html?score=' + score;
+                        }, 1000);
                     } else {
                         //alert('Time is up! Try again. Your score is ' + score);
                         window.location.href = '2try_again.html?score=' + score;
@@ -157,7 +157,7 @@
             if (score >= 80) {
                 clearInterval(timerInterval); // Stop the timer when the score reaches 80
                 // Redirect to the score page for successful completion
-                window.location.href = 'quizpage.html?score=' + score;
+                window.location.href = '2congratulations.html?score=' + score;
             }
         }
         
