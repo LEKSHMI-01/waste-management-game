@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waste Sorting Game</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .container {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .waste-container {
+        margin-left: 20px;
+    }
+
+    .waste {
+        width: 100px;
+        height: 100px;
+        border: 2px solid black;
+        margin: 10px;
+        display: inline-block;
+        cursor: pointer;
+        overflow: hidden; /* Ensure images fit within the container */
+    }
+
+    .waste img {
+        width: 100%; /* Make the image fill the container */
+        height: 100%; /* Make the image fill the container */
+    }
+
+    .pile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 20px;
+    }
+
+    .pile {
+        position: relative;
+        width: 220px; /* Increased width to accommodate the border and padding */
+        height: 220px; /* Increased height to accommodate the border and padding */
+        border: 2px solid black;
+        margin: 10px;
+        padding: 10px;
+        overflow: auto;
+    }
+
+    .pile::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px; /* Width of the growth marker */
+        height: 0; /* Initial height of the growth marker */
+        background-color: green; /* Color of the growth marker */
+        transition: height 0.5s; /* Smooth transition for height changes */
+    }
+
+    .hovered {
+        border: 2px dashed red;
+    }
+
+    .dragging {
+        opacity: 0.5;
+    }
+
+    .game-over-message {
+        display: none;
+        font-weight: bold;
+        color: green;
+    }
+
+    .waste-name {
+        font-size: 10px;
+        color: blue;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="pile-container">
+        <div class="pile" id="pile1">Biofuel Pile</div>
+        <div class="growth-marker" id="biofuel-growth"></div>
+    </div>
+
+    <div class="pile-container">
+        <div class="pile" id="pile2">Plastic Pile</div>
+        <div class="growth-marker" id="plastic-growth"></div>
+    </div>
+
+    <div class="pile-container">
+        <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
+        <div class="growth-marker" id="hazardous-growth"></div>
+    </div>
+
+    <div class="waste-container">
+        <div class="waste" id="wheat-straw" draggable="true" data-name="Wheat Straw" data-pile="pile1">
+            <img src="Wheat straw.png" alt="Wheat Straw">
+        </div>
+        <div class="waste" id="paper-waste" draggable="true" data-name="Paper Waste" data-pile="pile1">
+            <img src="Paper waste.png" alt="Paper Waste">
+        </div>
+        <div class="waste" id="algea" draggable="true" data-name="Algea" data-pile="pile1">
+            <img src="Algea.png" alt="Algea">
+        </div>
+        <div class="waste" id="food-waste" draggable="true" data-name="Food Waste" data-pile="pile1">
+            <img src="Food waste.png" alt="Food Waste">
+        </div>
+
+        <div class="waste" id="pet-bottles" draggable="true" data-name="Pet Bottles" data-pile="pile2">
+            <img src="PET bottles.png" alt="Pet Bottles">
+        </div>
+        <div class="waste" id="cosmetics" draggable="true" data-name="Cosmetics" data-pile="pile2">
+            <img src="Cosmetics.png" alt="Cosmetics">
+        </div>
+        <div class="waste" id="ldpe-cover" draggable="true" data-name="LDPE Cover" data-pile="pile2">
+            <img src="LDPE Cover.png" alt="LDPE Cover">
+        </div>
+        <div class="waste" id="plastic-medical" draggable="true" data-name="Plastic Medical" data-pile="pile2">
+            <img src="Plastic medical waste.png" alt="Plastic Medical">
+        </div>
+
+        <div class="waste" id="battery" draggable="true" data-name="Battery" data-pile="hazardous-pile">
+            <img src="Battay.png" alt="Battery">
+        </div>
+        <div class="waste" id="pesticides" draggable="true" data-name="Pesticides" data-pile="hazardous-pile">
+            <img src="Pesticides and herbicides.png" alt="Pesticides">
+        </div>
+        <div class="waste" id="e-waste" draggable="true" data-name="E-Waste" data-pile="hazardous-pile">
+            <img src="E waste.png" alt="E-Waste">
+        </div>
+        <div class="waste" id="chemicals" draggable="true" data-name="Chemicals" data-pile="hazardous-pile">
+            <img src="Chemicals.png" alt="Chemicals">
+        </div>
+    </div>
+</div>
+
+<div class="game-over-message" id="game-over-message">Level Complete! Congratulations!</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const wastes = document.querySelectorAll('.waste');
+    const piles = document.querySelectorAll('.pile');
+    const growthMarkers = document.querySelectorAll('.growth-marker');
+    const gameOverMessage = document.getElementById('game-over-message');
+
+    let gameCompleted = false;
+
+    wastes.forEach(waste => {
+        waste.addEventListener('dragstart', dragStart);
+        waste.addEventListener('dragend', dragEnd);
+        waste.addEventListener('mouseenter', showWasteName);
+        waste.addEventListener('mouseleave', hideWasteName);
+    });
+
+    piles.forEach(pile => {
+        pile.addEventListener('dragover', dragOver);
+        pile.addEventListener('dragenter', dragEnter);
+        pile.addEventListener('dragleave', dragLeave);
+        pile.addEventListener('drop', drop);
+    });
+
+    function dragStart() {
+        this.classList.add('dragging');
+    }
+
+    function dragEnd() {
+        this.classList.remove('dragging');
+        if (!gameCompleted) {
+            checkPiles();
+        }
+    }
+
+    function dragOver(e) {
+        e.preventDefault();
+    }
+
+    function dragEnter(e) {
+        e.preventDefault();
+        this.classList.add('hovered');
+    }
+
+    function dragLeave() {
+        this.classList.remove('hovered');
+    }
+
+    function drop(e) {
+    if (gameCompleted) return;
+
+    const draggedWaste = document.querySelector('.dragging');
+    const correctPile = draggedWaste.dataset.pile;
+
+    // Check if the dropped item belongs to the correct pile
+    if (this.id === correctPile) {
+        this.appendChild(draggedWaste);
+        updateGrowthMarker(this.id); // Update growth marker for the correct pile
+    }
+}
+
+    
+
+    function updateGrowthMarker(pileId) {
+        const pileIndex = Array.from(piles).findIndex(pile => pile.id === pileId);
+        const growthMarker = growthMarkers[pileIndex];
+        growthMarker.style.height = parseInt(growthMarker.style.height || 0) + 20 + 'px';
+    }
+
+    function checkPiles() {
+        const biofuels = ['wheat-straw', 'paper-waste', 'algea', 'food-waste'];
+        const plastics = ['pet-bottles', 'cosmetics', 'ldpe-cover', 'plastic-medical'];
+        const hazardousWastes = ['battery', 'pesticides', 'e-waste', 'chemicals'];
+
+        const pile1Contents = Array.from(piles[0].children).map(child => child.id);
+        const pile2Contents = Array.from(piles[1].children).map(child => child.id);
+        const hazardousPileContents = Array.from(piles[2].children).map(child => child.id);
+
+        const isBiofuelPileCorrect = biofuels.every(waste => pile1Contents.includes(waste));
+        const isPlasticPileCorrect = plastics.every(waste => pile2Contents.includes(waste));
+        const isHazardousPileCorrect = hazardousWastes.every(waste => hazardousPileContents.includes(waste));
+
+        if (isBiofuelPileCorrect && isPlasticPileCorrect && isHazardousPileCorrect) {
+            gameCompleted = true;
+            showGameOverMessage();
+            alert("Level Complete! Congratulations!");
+        }
+    }
+
+    function showGameOverMessage() {
+        gameOverMessage.style.display = 'block';
+    }
+
+    function showWasteName() {
+        const wasteName = this.dataset.name; // Retrieve the waste name from the dataset
+        const nameElement = document.createElement('div');
+        nameElement.className = 'waste-name';
+        nameElement.textContent = wasteName;
+        this.appendChild(nameElement);
+    }
+
+    function hideWasteName() {
+        const nameElement = this.querySelector('.waste-name');
+        if (nameElement) {
+            this.removeChild(nameElement);
+        }
+    }
+});
+</script>
+
+</body>
+</html>
