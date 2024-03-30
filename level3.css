@@ -1,0 +1,49 @@
+#container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.pile-box {
+    width: 200px;
+    height: 300px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+.pile {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.waste {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}
+.tooltip {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+.waste-name {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
