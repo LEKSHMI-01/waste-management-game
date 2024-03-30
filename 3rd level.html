@@ -86,21 +86,54 @@
 </head>
 <body>
 
-<div class="container">
-    <div class="pile-container">
-        <div class="pile" id="pile1">Biofuel Pile</div>
-        <div class="growth-marker" id="biofuel-growth"></div>
-    </div>
-
-    <div class="pile-container">
-        <div class="pile" id="pile2">Plastic Pile</div>
-        <div class="growth-marker" id="plastic-growth"></div>
-    </div>
-
-    <div class="pile-container">
-        <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
-        <div class="growth-marker" id="hazardous-growth"></div>
-    </div>
+    <div class="container">
+        <div class="pile-container">
+            <div class="pile" id="pile1">Biofuel Pile</div>
+            <div class="growth-marker" id="biofuel-growth"></div>
+            <div id="pile1_box" class="pile-box">
+                <h3>BIOfuel Pile</h3>
+                <div class="control-container">
+                    <label for="pile1-temp">Temperature:</label>
+                    <input id="pile1-temp" type="range" min="0" max="100" value="50">
+                </div>
+                <div class="control-container">
+                    <label for="pile1-pressure">Pressure:</label>
+                    <input id="pile1-pressure" type="range" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
+    
+        <div class="pile-container">
+            <div class="pile" id="pile2">Plastic Pile</div>
+            <div class="growth-marker" id="plastic-growth"></div>
+            <div id="pile2_box" class="pile-box">
+                <h3>Plastic Pile</h3>
+                <div class="control-container">
+                    <label for="pile2-temp">Temperature:</label>
+                    <input id="pile2-temp" type="range" min="0" max="100" value="50">
+                </div>
+                <div class="control-container">
+                    <label for="pile2-pressure">Pressure:</label>
+                    <input id="pile2-pressure" type="range" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
+    
+        <div class="pile-container">
+            <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
+            <div class="growth-marker" id="hazardous-growth"></div>
+            <div id="hazardous-waste-box" class="pile-box">
+                <h3>Hazardous Waste Disposal Pile</h3>
+                <div class="control-container">
+                    <label for="hazardous-temp">Temperature:</label>
+                    <input id="hazardous-temp" type="range" min="0" max="100" value="50">
+                </div>
+                <div class="control-container">
+                    <label for="hazardous-pressure">Pressure:</label>
+                    <input id="hazardous-pressure" type="range" min="0" max="100" value="50">
+                </div>
+            </div>
+        </div>
 
     <div class="waste-container">
         <div class="waste" id="wheat-straw" draggable="true" data-name="Wheat Straw" data-pile="pile1">
