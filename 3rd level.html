@@ -82,9 +82,44 @@
         font-size: 10px;
         color: blue;
     }
+
+    /* Add styles for the point box and timer */
+    .game-info {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    #points {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #timer {
+        font-size: 18px;
+    }
+
+    #try-again-button {
+        display: none;
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
+
+    <!-- Add the game info container for points and timer -->
+    <div class="game-info">
+        <div id="points">Points: 0</div>
+        <div id="timer">Time Left: 1:00</div>
+        <button id="try-again-button">Try Again</button>
+    </div>
 
     <div class="container">
         <div class="pile-container">
@@ -185,8 +220,29 @@ document.addEventListener("DOMContentLoaded", function() {
     const piles = document.querySelectorAll('.pile');
     const growthMarkers = document.querySelectorAll('.growth-marker');
     const gameOverMessage = document.getElementById('game-over-message');
+    const pointsDisplay = document.getElementById('points');
+    const timerDisplay = document.getElementById('timer');
+    const tryAgainButton = document.getElementById('try-again-button');
 
     let gameCompleted = false;
+    let points = 0;
+    let timeLeft = 60; // 1 minute in seconds
+
+    // Start the timer
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Update timer display every second
+    function updateTimer() {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            endGame();
+        }
+    }
 
     wastes.forEach(waste => {
         waste.addEventListener('dragstart', dragStart);
@@ -227,19 +283,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function drop(e) {
-    if (gameCompleted) return;
+        if (gameCompleted) return;
 
-    const draggedWaste = document.querySelector('.dragging');
-    const correctPile = draggedWaste.dataset.pile;
+        const draggedWaste = document.querySelector('.dragging');
+        const correctPile = draggedWaste.dataset.pile;
 
-    // Check if the dropped item belongs to the correct pile
-    if (this.id === correctPile) {
-        this.appendChild(draggedWaste);
-        updateGrowthMarker(this.id); // Update growth marker for the correct pile
+        // Check if the dropped item belongs to the correct pile
+        if (this.id === correctPile) {
+            this.appendChild(draggedWaste);
+            updateGrowthMarker(this.id); // Update growth marker for the correct pile
+            points += 10; // Increase points for correct sorting
+            pointsDisplay.textContent = `Points: ${points}`;
+        } else {
+            points -= 10; // Decrease points for incorrect sorting
+            pointsDisplay.textContent = `Points: ${points}`;
+        }
     }
-}
-
-    
 
     function updateGrowthMarker(pileId) {
         const pileIndex = Array.from(piles).findIndex(pile => pile.id === pileId);
@@ -263,12 +322,18 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isBiofuelPileCorrect && isPlasticPileCorrect && isHazardousPileCorrect) {
             gameCompleted = true;
             showGameOverMessage();
-            alert("Level Complete! Congratulations!");
+            clearInterval(timerInterval); // Stop the timer when game is completed
         }
     }
 
     function showGameOverMessage() {
         gameOverMessage.style.display = 'block';
+        tryAgainButton.style.display = 'block'; // Show the try again button
+        tryAgainButton.addEventListener('click', tryAgain);
+    }
+
+    function tryAgain() {
+        window.location.reload(); // Reload the page to restart the game
     }
 
     function showWasteName() {
@@ -284,6 +349,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (nameElement) {
             this.removeChild(nameElement);
         }
+    }
+
+    function endGame() {
+        gameCompleted = true;
+        clearInterval(timerInterval);
+        gameOverMessage.textContent = 'Time Up! Try Again!';
+        showGameOverMessage();
     }
 });
 </script>
