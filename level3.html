@@ -172,42 +172,42 @@
 
     <div class="waste-container">
         <div class="waste" id="wheat-straw" draggable="true" data-name="Wheat Straw" data-pile="pile1">
-            <img src="Images/Level 3/Wheat straw.png" alt="Wheat Straw">
+            <img src="Images/Level 3/Wheat straw.png" title="Wheat Straw">
         </div>
         <div class="waste" id="paper-waste" draggable="true" data-name="Paper Waste" data-pile="pile1">
-            <img src="Images/Level 3/Paper waste.png" alt="Paper Waste">
+            <img src="Images/Level 3/Paper waste.png" title="Paper Waste">
         </div>
         <div class="waste" id="algea" draggable="true" data-name="Algea" data-pile="pile1">
-            <img src="Images/Level 3/Algea.png" alt="Algea">
+            <img src="Images/Level 3/Algea.png" title="Algea">
         </div>
         <div class="waste" id="food-waste" draggable="true" data-name="Food Waste" data-pile="pile1">
-            <img src="Images/Level 3/Food waste.png" alt="Food Waste">
+            <img src="Images/Level 3/Food waste.png" title="Food Waste">
         </div>
 
         <div class="waste" id="pet-bottles" draggable="true" data-name="Pet Bottles" data-pile="pile2">
-            <img src="Images/Level 3/PET bottles.png" alt="Pet Bottles">
+            <img src="Images/Level 3/PET bottles.png" title="Pet Bottles">
         </div>
         <div class="waste" id="cosmetics" draggable="true" data-name="Cosmetics" data-pile="pile2">
-            <img src="Images/Level 3/Cosmetics.png" alt="Cosmetics">
+            <img src="Images/Level 3/Cosmetics.png" title="Cosmetics">
         </div>
         <div class="waste" id="ldpe-cover" draggable="true" data-name="LDPE Cover" data-pile="pile2">
-            <img src="Images/Level 3/LDPE Cover.png" alt="LDPE Cover">
+            <img src="Images/Level 3/LDPE Cover.png" title="LDPE Cover">
         </div>
         <div class="waste" id="plastic-medical" draggable="true" data-name="Plastic Medical" data-pile="pile2">
-            <img src="Images/Level 3/Plastic medical waste.png" alt="Plastic Medical">
+            <img src="Images/Level 3/Plastic medical waste.png" title="Plastic Medical">
         </div>
 
         <div class="waste" id="battery" draggable="true" data-name="Battery" data-pile="hazardous-pile">
-            <img src="Images/Level 3/Battay.png" alt="Battery">
+            <img src="Images/Level 3/Battay.png" title="Battery">
         </div>
         <div class="waste" id="pesticides" draggable="true" data-name="Pesticides" data-pile="hazardous-pile">
-            <img src="Images/Level 3/Pesticides and herbicides.png" alt="Pesticides">
+            <img src="Images/Level 3/Pesticides and herbicides.png" title="Pesticides">
         </div>
         <div class="waste" id="e-waste" draggable="true" data-name="E-Waste" data-pile="hazardous-pile">
-            <img src="Images/Level 3/E waste.png" alt="E-Waste">
+            <img src="Images/Level 3/E waste.png" title="E-Waste">
         </div>
         <div class="waste" id="chemicals" draggable="true" data-name="Chemicals" data-pile="hazardous-pile">
-            <img src="Images/Level 3/Chemicals.png" alt="Chemicals">
+            <img src="Images/Level 3/Chemicals.png" title="Chemicals">
         </div>
     </div>
 </div>
@@ -248,8 +248,6 @@ document.addEventListener("DOMContentLoaded", function() {
     wastes.forEach(waste => {
         waste.addEventListener('dragstart', dragStart);
         waste.addEventListener('dragend', dragEnd);
-        waste.addEventListener('mouseenter', showWasteName);
-        waste.addEventListener('mouseleave', hideWasteName);
     });
 
     piles.forEach(pile => {
@@ -343,21 +341,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function tryAgain() {
         window.location.reload(); // Reload the page to restart the game
-    }
-
-    function showWasteName() {
-        const wasteName = this.dataset.name; // Retrieve the waste name from the dataset
-        const nameElement = document.createElement('div');
-        nameElement.className = 'waste-name';
-        nameElement.textContent = wasteName;
-        this.appendChild(nameElement);
-    }
-
-    function hideWasteName() {
-        const nameElement = this.querySelector('.waste-name');
-        if (nameElement) {
-            this.removeChild(nameElement);
-        }
     }
 
     function endGame() {
