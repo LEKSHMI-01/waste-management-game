@@ -85,13 +85,13 @@
 
     /* Add styles for the point box and timer */
     .game-info {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     #points {
         font-size: 24px;
@@ -114,61 +114,61 @@
 </head>
 <body>
 
-    <!-- Add the game info container for points and timer -->
-    <div class="game-info">
-        <div id="points">Points: 0</div>
-        <div id="timer">Time Left: 1:00</div>
-        <button id="try-again-button">Try Again</button>
+<!-- Add the game info container for points and timer -->
+<div class="game-info">
+    <div id="points">Points: 0</div>
+    <div id="timer">Time Left: 1:00</div>
+    <button id="try-again-button">Try Again</button>
+</div>
+
+<div class="container">
+    <div class="pile-container">
+        <div class="pile" id="pile1">Biofuel Pile</div>
+        <div class="growth-marker" id="biofuel-growth"></div>
+        <div id="pile1_box" class="pile-box">
+            <h3>BIOfuel Pile</h3>
+            <div class="control-container">
+                <label for="pile1-temp">Temperature:</label>
+                <input id="pile1-temp" type="range" min="0" max="100" value="50">
+            </div>
+            <div class="control-container">
+                <label for="pile1-pressure">Pressure:</label>
+                <input id="pile1-pressure" type="range" min="0" max="100" value="50">
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <div class="pile-container">
-            <div class="pile" id="pile1">Biofuel Pile</div>
-            <div class="growth-marker" id="biofuel-growth"></div>
-            <div id="pile1_box" class="pile-box">
-                <h3>BIOfuel Pile</h3>
-                <div class="control-container">
-                    <label for="pile1-temp">Temperature:</label>
-                    <input id="pile1-temp" type="range" min="0" max="100" value="50">
-                </div>
-                <div class="control-container">
-                    <label for="pile1-pressure">Pressure:</label>
-                    <input id="pile1-pressure" type="range" min="0" max="100" value="50">
-                </div>
+    <div class="pile-container">
+        <div class="pile" id="pile2">Plastic Pile</div>
+        <div class="growth-marker" id="plastic-growth"></div>
+        <div id="pile2_box" class="pile-box">
+            <h3>Plastic Pile</h3>
+            <div class="control-container">
+                <label for="pile2-temp">Temperature:</label>
+                <input id="pile2-temp" type="range" min="0" max="100" value="50">
+            </div>
+            <div class="control-container">
+                <label for="pile2-pressure">Pressure:</label>
+                <input id="pile2-pressure" type="range" min="0" max="100" value="50">
             </div>
         </div>
-    
-        <div class="pile-container">
-            <div class="pile" id="pile2">Plastic Pile</div>
-            <div class="growth-marker" id="plastic-growth"></div>
-            <div id="pile2_box" class="pile-box">
-                <h3>Plastic Pile</h3>
-                <div class="control-container">
-                    <label for="pile2-temp">Temperature:</label>
-                    <input id="pile2-temp" type="range" min="0" max="100" value="50">
-                </div>
-                <div class="control-container">
-                    <label for="pile2-pressure">Pressure:</label>
-                    <input id="pile2-pressure" type="range" min="0" max="100" value="50">
-                </div>
+    </div>
+
+    <div class="pile-container">
+        <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
+        <div class="growth-marker" id="hazardous-growth"></div>
+        <div id="hazardous-waste-box" class="pile-box">
+            <h3>Hazardous Waste Disposal Pile</h3>
+            <div class="control-container">
+                <label for="hazardous-temp">Temperature:</label>
+                <input id="hazardous-temp" type="range" min="0" max="100" value="50">
+            </div>
+            <div class="control-container">
+                <label for="hazardous-pressure">Pressure:</label>
+                <input id="hazardous-pressure" type="range" min="0" max="100" value="50">
             </div>
         </div>
-    
-        <div class="pile-container">
-            <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
-            <div class="growth-marker" id="hazardous-growth"></div>
-            <div id="hazardous-waste-box" class="pile-box">
-                <h3>Hazardous Waste Disposal Pile</h3>
-                <div class="control-container">
-                    <label for="hazardous-temp">Temperature:</label>
-                    <input id="hazardous-temp" type="range" min="0" max="100" value="50">
-                </div>
-                <div class="control-container">
-                    <label for="hazardous-pressure">Pressure:</label>
-                    <input id="hazardous-pressure" type="range" min="0" max="100" value="50">
-                </div>
-            </div>
-        </div>
+    </div>
 
     <div class="waste-container">
         <div class="waste" id="wheat-straw" draggable="true" data-name="Wheat Straw" data-pile="pile1">
@@ -227,6 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let gameCompleted = false;
     let points = 0;
     let timeLeft = 60; // 1 minute in seconds
+    let penalties = {}; // Store penalties for wrongly sorted items
 
     // Start the timer
     const timerInterval = setInterval(updateTimer, 1000);
@@ -294,8 +295,16 @@ document.addEventListener("DOMContentLoaded", function() {
             updateGrowthMarker(this.id); // Update growth marker for the correct pile
             points += 10; // Increase points for correct sorting
             pointsDisplay.textContent = `Points: ${points}`;
+            if (penalties.hasOwnProperty(draggedWaste.id)) {
+                delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
+            }
         } else {
-            points -= 10; // Decrease points for incorrect sorting
+            if (!penalties.hasOwnProperty(draggedWaste.id)) {
+                penalties[draggedWaste.id] = 10; // Set initial penalty if item is sorted wrongly for the first time
+            } else {
+                penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
+            }
+            points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
             pointsDisplay.textContent = `Points: ${points}`;
         }
     }
