@@ -105,10 +105,13 @@
   <script>
 
     function continueToNextLevel() {
-      window.location.href = 'choose level.html';
+     
+
+      window.location.href = 'choose level.html?level2=completed';
+      document.getElementById('level3').disabled = false;
     }
     // Call the completeLevel1 function to update the unlockedLevels variable
-    completeLevel1();
+   // completeLevel1();
 
   </script>
 </body>
