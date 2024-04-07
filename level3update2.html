@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waste Sorting Game</title>
+<style>
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 200px;
+}
+
+.pile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.pile {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border: 2px solid #333;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+}
+.pile img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.waste-container {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 150px;
+    padding: 10px;
+    border-top: 2px solid #333;
+    background-image: url("Images/Level 3/waves.png");
+    background-size: cover;
+}
+
+.waste {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #333;
+    margin: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    animation: moveWaste 5s infinite alternate;
+}
+
+.waste img {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes moveWaste {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(20px);
+    }
+}
+
+.game-info {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#points,
+#timer {
+    margin-bottom: 10px;
+}
+
+.hovered {
+    border-color: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.dragging {
+    opacity: 0.7;
+}
+</style>
+</head>
+<body>
+
+<!-- Add the game info container for points and timer -->
+<div class="game-info">
+    <div id="points">Points: 0</div>
+    <div id="timer">Time Left: 1:00</div>
+</div>
+
+<div class="container">
+    <div class="pile-container">
+        <div class="pile" id="pile1">
+            <img src="Images/Level 3/Biogas.png" alt="Biofuel">
+        </div>
+    </div>
+
+    <div class="pile-container">
+        <div class="pile" id="pile2">
+            <img src="Images/Level 3/Plastic extrusion machine.png" alt="Plastic Pile">
+        </div>
+    </div>
+
+    <div class="pile-container">
+        <div class="pile" id="hazardous-pile">
+            <img src="Images/Level 3/incinerator.png" alt="Hazardous Waste Pile">
+        </div>
+    </div>
+</div>
+
+<div class="waste-container">
+    <div class="waste" id="wheat-straw" draggable="true" data-name="Wheat Straw" data-pile="pile1">
+        <img src="Images/Level 3/Wheat straw.png" title="Wheat Straw">
+    </div>
+    <div class="waste" id="paper-waste" draggable="true" data-name="Paper Waste" data-pile="pile1">
+        <img src="Images/Level 3/Paper waste.png" title="Paper Waste">
+    </div>
+    <div class="waste" id="algea" draggable="true" data-name="Algea" data-pile="pile1">
+        <img src="Images/Level 3/Algea.png" title="Algea">
+    </div>
+    <div class="waste" id="food-waste" draggable="true" data-name="Food Waste" data-pile="pile1">
+        <img src="Images/Level 3/Food waste.png" title="Food Waste">
+    </div>
+
+    <div class="waste" id="pet-bottles" draggable="true" data-name="Pet Bottles" data-pile="pile2">
+        <img src="Images/Level 3/PET bottles.png" title="Pet Bottles">
+    </div>
+    <div class="waste" id="cosmetics" draggable="true" data-name="Cosmetics" data-pile="pile2">
+        <img src="Images/Level 3/Cosmetics.png" title="Cosmetics">
+    </div>
+    <div class="waste" id="ldpe-cover" draggable="true" data-name="LDPE Cover" data-pile="pile2">
+        <img src="Images/Level 3/LDPE Cover.png" title="LDPE Cover">
+    </div>
+    <div class="waste" id="plastic-medical" draggable="true" data-name="Plastic Medical" data-pile="pile2">
+        <img src="Images/Level 3/Plastic medical waste.png" title="Plastic Medical">
+    </div>
+
+    <div class="waste" id="battery" draggable="true" data-name="Battery" data-pile="hazardous-pile">
+        <img src="Images/Level 3/Battay.png" title="Battery">
+    </div>
+    <div class="waste" id="pesticides" draggable="true" data-name="Pesticides" data-pile="hazardous-pile">
+        <img src="Images/Level 3/Pesticides and herbicides.png" title="Pesticides">
+    </div>
+    <div class="waste" id="e-waste" draggable="true" data-name="E-Waste" data-pile="hazardous-pile">
+        <img src="Images/Level 3/E waste.png" title="E-Waste">
+    </div>
+    <div class="waste" id="chemicals" draggable="true" data-name="Chemicals" data-pile="hazardous-pile">
+        <img src="Images/Level 3/Chemicals.png" title="Chemicals">
+    </div>
+    
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const wastes = document.querySelectorAll('.waste');
+    const piles = document.querySelectorAll('.pile');
+    const pointsDisplay = document.getElementById('points');
+    const timerDisplay = document.getElementById('timer');
+
+    let points = 0;
+    let timeLeft = 60; // 1 minute in seconds
+    let penalties = {}; // Store penalties for wrongly sorted items
+
+    // Start the timer
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Update timer display every second
+    function updateTimer() {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            endGame();
+        }
+    }
+
+    wastes.forEach(waste => {
+        waste.addEventListener('dragstart', dragStart);
+        waste.addEventListener('dragend', dragEnd);
+    });
+
+    piles.forEach(pile => {
+        pile.addEventListener('dragover', dragOver);
+        pile.addEventListener('dragenter', dragEnter);
+        pile.addEventListener('dragleave', dragLeave);
+        pile.addEventListener('drop', drop);
+    });
+
+    function dragStart() {
+        this.classList.add('dragging');
+    }
+
+    function dragEnd() {
+        this.classList.remove('dragging');
+        checkPiles();
+    }
+
+    function dragOver(e) {
+        e.preventDefault();
+    }
+
+    function dragEnter(e) {
+        e.preventDefault();
+        this.classList.add('hovered');
+    }
+
+    function dragLeave() {
+        this.classList.remove('hovered');
+    }
+
+    function drop(e) {
+        const draggedWaste = document.querySelector('.dragging');
+        const correctPile = draggedWaste.dataset.pile;
+
+        // Check if the dropped item belongs to the correct pile
+        if (this.id === correctPile) {
+            this.appendChild(draggedWaste);
+            points += 10; // Increase points for correct sorting
+            pointsDisplay.textContent = `Points: ${points}`;
+            if (penalties.hasOwnProperty(draggedWaste.id)) {
+                delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
+            }
+        } else {
+            if (!penalties.hasOwnProperty(draggedWaste.id)) {
+                penalties[draggedWaste.id] = 10; // Set initial penalty if item is sorted wrongly for the first time
+            } else {
+                penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
+            }
+            points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
+            pointsDisplay.textContent = `Points: ${points}`;
+        }
+    }
+
+    function checkPiles() {
+        const biofuels = ['wheat-straw', 'paper-waste', 'algea', 'food-waste'];
+        const plastics = ['pet-bottles', 'cosmetics', 'ldpe-cover', 'plastic-medical'];
+        const hazardousWastes = ['battery', 'pesticides', 'e-waste', 'chemicals'];
+
+        const pile1Contents = Array.from(piles[0].children).map(child => child.id);
+        const pile2Contents = Array.from(piles[1].children).map(child => child.id);
+        const hazardousPileContents = Array.from(piles[2].children).map(child => child.id);
+
+        const isBiofuelPileCorrect = biofuels.every(waste => pile1Contents.includes(waste));
+        const isPlasticPileCorrect = plastics.every(waste => pile2Contents.includes(waste));
+        const isHazardousPileCorrect = hazardousWastes.every(waste => hazardousPileContents.includes(waste));
+
+        if (isBiofuelPileCorrect && isPlasticPileCorrect && isHazardousPileCorrect) {
+            clearInterval(timerInterval); // Stop the timer when game is completed
+            if (points === 120) {
+                window.location.href = '3congratulations.html?points=' + points;
+            } else {
+                window.location.href = '3try_again.html?points=' + points;
+            }
+        }
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        timerDisplay.textContent = 'Time Up!';
+        window.location.href = '3tryagain.html?points=' + points;
+    }
+});
+</script>
+
+</body>
+</html>
