@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Congratulations!</title>
+    <script src="choose level.html"></script>
     <style>
         body {
             font-family: 'Trebuchet MS', sans-serif;
@@ -96,7 +97,9 @@
 
             // Function to redirect to chooselevel.html
             function redirectToChooseLevel() {
-                window.location.href = "choose level.html";
+                
+                    window.location.href = 'choose level.html?level2=completed';
+                    document.getElementById('level3').disabled = false;
             }
         </script>
     </div>
