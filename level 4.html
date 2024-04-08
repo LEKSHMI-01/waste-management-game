@@ -8,13 +8,15 @@
     body {
         margin: 0;
         overflow: hidden;
+        
     }
     #game-container {
-        width: 800px; /* Adjust width as needed */
+        width: 1500px; /* Adjust width as needed */
         height: 600px; /* Adjust height as needed */
         background-image: url('environment.jpg'); /* Replace 'environment.jpg' with your environment image */
         background-size: cover;
         position: relative;
+        
     }
     /* Style for the player image */
     .player-img {
@@ -23,15 +25,17 @@
         position: absolute;
     }
     .waste-object {
-        width: 30px; /* Adjust waste object size as needed */
-        height: 30px; /* Adjust waste object size as needed */
-        background-color: yellow; /* Waste object color */
+        width: 50px; /* Adjust waste object size as needed */
+        height: 50px; /* Adjust waste object size as needed */
+        /* Remove background-color and add background-image */
+        background-image: url('l1glass1.jpg'); /* Default waste image */
+        background-size: cover;
         position: absolute;
     }
     /* Style for destination images */
     .destination-img {
-        width: 80px; /* Adjust destination size as needed */
-        height: 120px; /* Adjust destination size as needed */
+        width: 120px; /* Adjust destination size as needed */
+        height: 140px; /* Adjust destination size as needed */
         position: absolute;
     }
 </style>
@@ -53,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let playerX = 0;
     let playerY = 0;
     let heldObject = null;
+    let wasteObjects = [];
 
     // Define destination points
     const destinations = [
@@ -115,16 +120,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to generate random waste objects
     function generateWasteObjects() {
-        const numObjects = 10; // Adjust the number of waste objects as needed
+        const numObjects = 15; // Adjust the number of waste objects as needed
         const container = document.getElementById('game-container');
+        const wasteImages = ['l1glass1.jpg', 'l1plastic bottle.jpg', 'l1polystyrene stock.jpg', 'papper.jpg', 'plastic_bottle.jpg', 'plasticbag.jpg', 'Food waste.jpg', 'Plastic medical waste.jpg'];
+
         for (let i = 0; i < numObjects; i++) {
             const randomX = Math.floor(Math.random() * container.offsetWidth);
             const randomY = Math.floor(Math.random() * container.offsetHeight);
             const wasteObject = document.createElement('div');
             wasteObject.className = 'waste-object';
+            const randomImage = wasteImages[Math.floor(Math.random() * wasteImages.length)];
+            wasteObject.style.backgroundImage = `url('${randomImage}')`;
             wasteObject.style.left = randomX + 'px';
             wasteObject.style.top = randomY + 'px';
-            container.appendChild(wasteObject);
+            if (!checkWasteOverlap(wasteObject)) {
+                container.appendChild(wasteObject);
+                wasteObjects.push(wasteObject);
+            }
         }
     }
 
@@ -155,8 +167,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to check collision with waste objects
     function checkWasteObjectCollision(player) {
         const playerRect = player.getBoundingClientRect();
-        const wasteObjects = document.querySelectorAll('.waste-object');
-        for (const wasteObject of wasteObjects) {
+        for (let i = 0; i < wasteObjects.length; i++) {
+            const wasteObject = wasteObjects[i];
             const wasteRect = wasteObject.getBoundingClientRect();
             if (
                 playerRect.top < wasteRect.bottom &&
@@ -166,10 +178,29 @@ document.addEventListener("DOMContentLoaded", function() {
             ) {
                 // Player collided with waste object
                 console.log('Player picked up waste object');
+                wasteObjects.splice(i, 1); // Remove the waste object from the array
                 return wasteObject;
             }
         }
         return null;
+    }
+
+    // Function to check if the new waste object overlaps with existing ones
+    function checkWasteOverlap(newWasteObject) {
+        const newWasteRect = newWasteObject.getBoundingClientRect();
+        for (const wasteObject of wasteObjects) {
+            const wasteRect = wasteObject.getBoundingClientRect();
+            if (
+                newWasteRect.top < wasteRect.bottom &&
+                newWasteRect.bottom > wasteRect.top &&
+                newWasteRect.left < wasteRect.right &&
+                newWasteRect.right > wasteRect.left
+            ) {
+                // Overlap detected
+                return true;
+            }
+        }
+        return false;
     }
 });
 </script>
