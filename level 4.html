@@ -16,10 +16,10 @@
         background-size: cover;
         position: relative;
     }
-    .player {
-        width: 50px; /* Adjust player size as needed */
-        height: 50px; /* Adjust player size as needed */
-        background-color: red; /* Player color */
+    /* Style for the player image */
+    .player-img {
+        width: 80px; /* Adjust player size as needed */
+        height: 110px; /* Adjust player size as needed */
         position: absolute;
     }
     .waste-object {
@@ -28,10 +28,10 @@
         background-color: yellow; /* Waste object color */
         position: absolute;
     }
-    .destination {
-        width: 50px; /* Adjust destination size as needed */
-        height: 50px; /* Adjust destination size as needed */
-        background-color: green; /* Destination color */
+    /* Style for destination images */
+    .destination-img {
+        width: 80px; /* Adjust destination size as needed */
+        height: 120px; /* Adjust destination size as needed */
         position: absolute;
     }
 </style>
@@ -39,9 +39,11 @@
 <body>
 
 <div id="game-container">
-    <div class="player" id="player"></div>
-    <div class="destination" id="destination1" style="top: 100px; left: 100px;"></div>
-    <div class="destination" id="destination2" style="top: 300px; left: 500px;"></div>
+    <!-- Player image replaced here -->
+    <img src="Images/man.jpg" alt="Player" class="player-img" id="player">
+    <!-- Destination images replaced here -->
+    <img src="Images/l1recycl.png" alt="Recyclable Destination" class="destination-img" id="destination1" style="top: 100px; left: 100px;">
+    <img src="Images/l1nonrecycl.png" alt="Non-Recyclable Destination" class="destination-img" id="destination2" style="top: 300px; left: 500px;">
     <!-- Add more destination points as needed -->
 </div>
 
