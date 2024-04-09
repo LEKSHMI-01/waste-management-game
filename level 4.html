@@ -8,7 +8,6 @@
     body {
         margin: 0;
         overflow: hidden;
-        
     }
     #game-container {
         width: 1500px; /* Adjust width as needed */
@@ -16,7 +15,6 @@
         background-image: url('environment.jpg'); /* Replace 'environment.jpg' with your environment image */
         background-size: cover;
         position: relative;
-        
     }
     /* Style for the player image */
     .player-img {
@@ -28,7 +26,6 @@
         width: 50px; /* Adjust waste object size as needed */
         height: 50px; /* Adjust waste object size as needed */
         /* Remove background-color and add background-image */
-        background-image: url('l1glass1.jpg'); /* Default waste image */
         background-size: cover;
         position: absolute;
     }
@@ -37,6 +34,15 @@
         width: 120px; /* Adjust destination size as needed */
         height: 140px; /* Adjust destination size as needed */
         position: absolute;
+    }
+    /* Style for score box */
+    #score-box {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 5px;
     }
 </style>
 </head>
@@ -51,6 +57,11 @@
     <!-- Add more destination points as needed -->
 </div>
 
+<div id="score-box">
+    <h2>Score</h2>
+    <p id="score">0</p>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const player = document.getElementById('player');
@@ -58,13 +69,16 @@ document.addEventListener("DOMContentLoaded", function() {
     let playerY = 0;
     let heldObject = null;
     let wasteObjects = [];
+    let score = 0;
 
     // Define destination points
     const destinations = [
-        { x: 100, y: 100 },
-        { x: 500, y: 300 }
-        // Add more destination points as needed
+        { x: 100, y: 100 }, // Recyclable bin destination
+        { x: 500, y: 300 } // Non-recyclable bin destination
     ];
+
+    // Q-learning penalties for each waste object
+    const qLearningPenalties = {};
 
     // Generate random waste objects
     generateWasteObjects();
@@ -93,7 +107,21 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
             case 'Enter':
                 if (heldObject !== null) {
-                    if (checkDestinationCollision(player)) {
+                    const destinationIndex = checkDestinationCollision(player);
+                    if (destinationIndex !== -1) {
+                        const wasteType = heldObject.dataset.type;
+                        if (destinationIndex === wasteType) {
+                            score += 10; // Correct sorting rewards 10 points
+                            updateScore();
+                            qLearningPenalties[wasteType] = Math.max((qLearningPenalties[wasteType] || 0) - 1, 0); // Reduce penalty level
+                            console.log(`Player placed ${wasteType} in the correct bin.`);
+                        } else {
+                            const penalty = calculatePenalty(wasteType);
+                            score -= penalty; // Penalty for wrong sorting
+                            updateScore();
+                            qLearningPenalties[wasteType] = (qLearningPenalties[wasteType] || 0) + 1; // Increase penalty level
+                            console.log(`Player sorted ${wasteType} wrongly with a penalty of ${penalty}.`);
+                        }
                         heldObject.remove(); // Remove the waste object from the environment
                         heldObject = null;
                     }
@@ -122,14 +150,24 @@ document.addEventListener("DOMContentLoaded", function() {
     function generateWasteObjects() {
         const numObjects = 15; // Adjust the number of waste objects as needed
         const container = document.getElementById('game-container');
-        const wasteImages = ['l1glass1.jpg', 'l1plastic bottle.jpg', 'l1polystyrene stock.jpg', 'papper.jpg', 'plastic_bottle.jpg', 'plasticbag.jpg', 'Food waste.jpg', 'Plastic medical waste.jpg'];
+        const recyclableImages = ['l1glass1.jpg', 'l1plastic bottle.jpg', 'l1polystyrene stock.jpg', 'papper.jpg', 'plastic_bottle.jpg'];
+        const nonRecyclableImages = ['plasticbag.jpg', 'Food waste.jpg', 'Plastic medical waste.jpg'];
 
         for (let i = 0; i < numObjects; i++) {
             const randomX = Math.floor(Math.random() * container.offsetWidth);
             const randomY = Math.floor(Math.random() * container.offsetHeight);
             const wasteObject = document.createElement('div');
             wasteObject.className = 'waste-object';
-            const randomImage = wasteImages[Math.floor(Math.random() * wasteImages.length)];
+            let randomImage;
+            let wasteType;
+            if (i < 5) { // First 5 waste objects are recyclable
+                randomImage = recyclableImages[Math.floor(Math.random() * recyclableImages.length)];
+                wasteType = 0; // Recyclable
+            } else { // Remaining waste objects are non-recyclable
+                randomImage = nonRecyclableImages[Math.floor(Math.random() * nonRecyclableImages.length)];
+                wasteType = 1; // Non-recyclable
+            }
+            wasteObject.dataset.type = wasteType;
             wasteObject.style.backgroundImage = `url('${randomImage}')`;
             wasteObject.style.left = randomX + 'px';
             wasteObject.style.top = randomY + 'px';
@@ -143,7 +181,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to check collision with destination points
     function checkDestinationCollision(player) {
         const playerRect = player.getBoundingClientRect();
-        for (const destination of destinations) {
+        for (let i = 0; i < destinations.length; i++) {
+            const destination = destinations[i];
             const destinationRect = {
                 top: destination.y,
                 bottom: destination.y + 50, // Adjust destination size as needed
@@ -158,10 +197,10 @@ document.addEventListener("DOMContentLoaded", function() {
             ) {
                 // Player collided with destination point
                 console.log('Player reached destination');
-                return true;
+                return i; // Return the index of the destination
             }
         }
-        return false;
+        return -1; // No collision with any destination
     }
 
     // Function to check collision with waste objects
@@ -201,6 +240,19 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
         return false;
+    }
+
+    // Function to calculate penalty based on Q-learning
+    function calculatePenalty(wasteType) {
+        const currentPenalty = qLearningPenalties[wasteType] || 0;
+        const penalty = Math.pow(2, currentPenalty) * 10; // Penalty increases exponentially
+        return penalty;
+    }
+
+    // Function to update the score displayed in the score box
+    function updateScore() {
+        const scoreElement = document.getElementById('score');
+        scoreElement.textContent = score;
     }
 });
 </script>
