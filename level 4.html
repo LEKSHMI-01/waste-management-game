@@ -1,261 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Waste Management Game - Level 2</title>
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-    }
-    #game-container {
-        width: 1500px; /* Adjust width as needed */
-        height: 600px; /* Adjust height as needed */
-        background-image: url('environment.jpg'); /* Replace 'environment.jpg' with your environment image */
-        background-size: cover;
-        position: relative;
-    }
-    /* Style for the player image */
-    .player-img {
-        width: 80px; /* Adjust player size as needed */
-        height: 110px; /* Adjust player size as needed */
-        position: absolute;
-    }
-    .waste-object {
-        width: 50px; /* Adjust waste object size as needed */
-        height: 50px; /* Adjust waste object size as needed */
-        /* Remove background-color and add background-image */
-        background-size: cover;
-        position: absolute;
-    }
-    /* Style for destination images */
-    .destination-img {
-        width: 120px; /* Adjust destination size as needed */
-        height: 140px; /* Adjust destination size as needed */
-        position: absolute;
-    }
-    /* Style for score box */
-    #score-box {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 10px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 5px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Sorting Game - Level 2</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background-image: url('Images/Level 2/background_image.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .waste-item {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            position: absolute;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        #recyclable-bin,
+        #non-recyclable-bin {
+            width: 200px;
+            cursor: pointer;
+            position: fixed;
+            transform: translateY(-50%);
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        #recyclable-bin {
+            top: 50%;
+            left: 55%;
+        }
+
+        #non-recyclable-bin {
+            top: 52%;
+            right: 17%;
+        }
+
+        .score-timer-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.51);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .score-timer-container span {
+            margin: 5px 0;
+        }
+    </style>
 </head>
+
 <body>
+    <div class="score-timer-container">
+        <span id="score">Score: <span id="score-value">0</span></span>
+        <span id="penalty">Penalty: <span id="penalty-value">0</span></span>
+        <span id="timer">Time: <span id="countdown">40</span> seconds</span>
+    </div>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img id="player" src="Images/player.png" style="position: absolute; top: 50%; left: 50px; width: 50px; height: 50px;">
+    <img id="waste1" src="Images/Level 2/plastic_bottle.png" class="waste-item" data-type="recyclable"
+        title="Plastic Bottle" style="top: 700px; left: 400px;">
+    <img id="waste2" src="Images/Level 2/broken_glass.png" class="waste-item" data-type="non-recyclable"
+        title="Broken Glass" style="top: 650px; left: 600px;">
+    <img id="waste3" src="Images/Level 2/paper.png" class="waste-item" data-type="recyclable" title="Paper"
+        style="top: 750px; left: 100px; height: 100px; width: 100px;">
+    <img id="waste4" src="Images/Level 2/package.png" class="waste-item" data-type="non-recyclable" title="Package"
+        style="top: 480px; left: 150px;height: 100px; width: 100px;">
+    <img id="waste5" src="Images/Level 2/plasticbag.png" class="waste-item" data-type="recyclable"
+        title="Plastic Bag" style="top: 440px; left: 400px; height: 70px; width: 70px;">
+    <img id="waste6" src="Images/Level 2/plasticpack.png" class="waste-item" data-type="non-recyclable"
+        title="Plastic Pack" style="top: 400px; left: 1420px; height: 60px; width: 60px;">
+    <img id="waste7" src="Images/Level 2/glass.png" class="waste-item" data-type="recyclable" title="Glass"
+        style="top: 430px; left: 750px;height: 80px; width: 80px;">
+    <img id="waste8" src="Images/Level 2/paper_bag.png" class="waste-item" data-type="recyclable" title="Paper Bag"
+        style="top: 470px; left: 1300px; height: 60px; width: 60px;">
 
-<div id="game-container">
-    <!-- Player image replaced here -->
-    <img src="Images/man.jpg" alt="Player" class="player-img" id="player">
-    <!-- Destination images replaced here -->
-    <img src="Images/l1recycl.png" alt="Recyclable Destination" class="destination-img" id="destination1" style="top: 100px; left: 100px;">
-    <img src="Images/l1nonrecycl.png" alt="Non-Recyclable Destination" class="destination-img" id="destination2" style="top: 300px; left: 500px;">
-    <!-- Add more destination points as needed -->
-</div>
+    <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable">
+    <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image"
+        data-type="non-recyclable">
 
-<div id="score-box">
-    <h2>Score</h2>
-    <p id="score">0</p>
-</div>
+    <script>
+        let countdown = 40;
+        let score = 0;
+        let penalty = 0;
+        let playerPosition = { x: 50, y: 50 };
+        let carryingWaste = null;
+        const playerSpeed = 10;
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const player = document.getElementById('player');
-    let playerX = 0;
-    let playerY = 0;
-    let heldObject = null;
-    let wasteObjects = [];
-    let score = 0;
+        const timerInterval = setInterval(updateTimer, 1000);
 
-    // Define destination points
-    const destinations = [
-        { x: 100, y: 100 }, // Recyclable bin destination
-        { x: 500, y: 300 } // Non-recyclable bin destination
-    ];
-
-    // Q-learning penalties for each waste object
-    const qLearningPenalties = {};
-
-    // Generate random waste objects
-    generateWasteObjects();
-
-    // Set initial player position
-    setPosition(player, playerX, playerY);
-
-    // Event listener for keyboard input
-    document.addEventListener('keydown', function(event) {
-        const key = event.key;
-        const speed = 10; // Adjust player movement speed as needed
-
-        // Move player based on arrow keys
-        switch (key) {
-            case 'ArrowUp':
-                playerY -= speed;
-                break;
-            case 'ArrowDown':
-                playerY += speed;
-                break;
-            case 'ArrowLeft':
-                playerX -= speed;
-                break;
-            case 'ArrowRight':
-                playerX += speed;
-                break;
-            case 'Enter':
-                if (heldObject !== null) {
-                    const destinationIndex = checkDestinationCollision(player);
-                    if (destinationIndex !== -1) {
-                        const wasteType = heldObject.dataset.type;
-                        if (destinationIndex === wasteType) {
-                            score += 10; // Correct sorting rewards 10 points
-                            updateScore();
-                            qLearningPenalties[wasteType] = Math.max((qLearningPenalties[wasteType] || 0) - 1, 0); // Reduce penalty level
-                            console.log(`Player placed ${wasteType} in the correct bin.`);
-                        } else {
-                            const penalty = calculatePenalty(wasteType);
-                            score -= penalty; // Penalty for wrong sorting
-                            updateScore();
-                            qLearningPenalties[wasteType] = (qLearningPenalties[wasteType] || 0) + 1; // Increase penalty level
-                            console.log(`Player sorted ${wasteType} wrongly with a penalty of ${penalty}.`);
-                        }
-                        heldObject.remove(); // Remove the waste object from the environment
-                        heldObject = null;
-                    }
+        function updateTimer() {
+            countdown--;
+            document.getElementById('countdown').textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timerInterval);
+                if (score >= 80) {
+                    setTimeout(() => {
+                        window.location.href = '2congratulations.html?score=' + score;
+                    }, 1000);
                 } else {
-                    heldObject = checkWasteObjectCollision(player);
-                    if (heldObject !== null) {
-                        heldObject.style.left = '0'; // Adjust held object position relative to the player
-                        heldObject.style.top = '0'; // Adjust held object position relative to the player
-                        player.appendChild(heldObject); // Attach the held object to the player
-                    }
+                    window.location.href = '2try_again.html?score=' + score;
                 }
-                break;
-        }
-
-        // Update player position
-        setPosition(player, playerX, playerY);
-    });
-
-    // Function to set element position
-    function setPosition(element, x, y) {
-        element.style.left = x + 'px';
-        element.style.top = y + 'px';
-    }
-
-    // Function to generate random waste objects
-    function generateWasteObjects() {
-        const numObjects = 15; // Adjust the number of waste objects as needed
-        const container = document.getElementById('game-container');
-        const recyclableImages = ['l1glass1.jpg', 'l1plastic bottle.jpg', 'l1polystyrene stock.jpg', 'papper.jpg', 'plastic_bottle.jpg'];
-        const nonRecyclableImages = ['plasticbag.jpg', 'Food waste.jpg', 'Plastic medical waste.jpg'];
-
-        for (let i = 0; i < numObjects; i++) {
-            const randomX = Math.floor(Math.random() * container.offsetWidth);
-            const randomY = Math.floor(Math.random() * container.offsetHeight);
-            const wasteObject = document.createElement('div');
-            wasteObject.className = 'waste-object';
-            let randomImage;
-            let wasteType;
-            if (i < 5) { // First 5 waste objects are recyclable
-                randomImage = recyclableImages[Math.floor(Math.random() * recyclableImages.length)];
-                wasteType = 0; // Recyclable
-            } else { // Remaining waste objects are non-recyclable
-                randomImage = nonRecyclableImages[Math.floor(Math.random() * nonRecyclableImages.length)];
-                wasteType = 1; // Non-recyclable
-            }
-            wasteObject.dataset.type = wasteType;
-            wasteObject.style.backgroundImage = `url('${randomImage}')`;
-            wasteObject.style.left = randomX + 'px';
-            wasteObject.style.top = randomY + 'px';
-            if (!checkWasteOverlap(wasteObject)) {
-                container.appendChild(wasteObject);
-                wasteObjects.push(wasteObject);
             }
         }
-    }
 
-    // Function to check collision with destination points
-    function checkDestinationCollision(player) {
-        const playerRect = player.getBoundingClientRect();
-        for (let i = 0; i < destinations.length; i++) {
-            const destination = destinations[i];
-            const destinationRect = {
-                top: destination.y,
-                bottom: destination.y + 50, // Adjust destination size as needed
-                left: destination.x,
-                right: destination.x + 50 // Adjust destination size as needed
-            };
-            if (
-                playerRect.top < destinationRect.bottom &&
-                playerRect.bottom > destinationRect.top &&
-                playerRect.left < destinationRect.right &&
-                playerRect.right > destinationRect.left
-            ) {
-                // Player collided with destination point
-                console.log('Player reached destination');
-                return i; // Return the index of the destination
+        function updateScore() {
+            score += 10;
+            document.getElementById('score-value').textContent = score;
+            if (score >= 80) {
+                clearInterval(timerInterval);
+                window.location.href = '2congratulations.html?score=' + score;
             }
         }
-        return -1; // No collision with any destination
-    }
 
-    // Function to check collision with waste objects
-    function checkWasteObjectCollision(player) {
-        const playerRect = player.getBoundingClientRect();
-        for (let i = 0; i < wasteObjects.length; i++) {
-            const wasteObject = wasteObjects[i];
-            const wasteRect = wasteObject.getBoundingClientRect();
-            if (
-                playerRect.top < wasteRect.bottom &&
-                playerRect.bottom > wasteRect.top &&
-                playerRect.left < wasteRect.right &&
-                playerRect.right > wasteRect.left
-            ) {
-                // Player collided with waste object
-                console.log('Player picked up waste object');
-                wasteObjects.splice(i, 1); // Remove the waste object from the array
-                return wasteObject;
+        function updatePenalty() {
+            penalty += 10;
+            document.getElementById('penalty-value').textContent = penalty;
+        }
+
+        function movePlayer(keyCode) {
+            switch (keyCode) {
+                case 37: // Left arrow
+                    playerPosition.x -= playerSpeed;
+                    break;
+                case 38: // Up arrow
+                    playerPosition.y -= playerSpeed;
+                    break;
+                case 39: // Right arrow
+                    playerPosition.x += playerSpeed;
+                    break;
+                case 40: // Down arrow
+                    playerPosition.y += playerSpeed;
+                    break;
+            }
+            document.getElementById('player').style.left = playerPosition.x + 'px';
+            document.getElementById('player').style.top = playerPosition.y + 'px';
+
+            // Update waste position if carrying
+            if (carryingWaste) {
+                carryingWaste.style.left = playerPosition.x + 'px';
+                carryingWaste.style.top = playerPosition.y + 'px';
             }
         }
-        return null;
-    }
 
-    // Function to check if the new waste object overlaps with existing ones
-    function checkWasteOverlap(newWasteObject) {
-        const newWasteRect = newWasteObject.getBoundingClientRect();
-        for (const wasteObject of wasteObjects) {
-            const wasteRect = wasteObject.getBoundingClientRect();
-            if (
-                newWasteRect.top < wasteRect.bottom &&
-                newWasteRect.bottom > wasteRect.top &&
-                newWasteRect.left < wasteRect.right &&
-                newWasteRect.right > wasteRect.left
-            ) {
-                // Overlap detected
-                return true;
+        function collectWaste() {
+            if (!carryingWaste) {
+                const playerRect = document.getElementById('player').getBoundingClientRect();
+                const wasteItems = document.querySelectorAll('.waste-item');
+                wasteItems.forEach(item => {
+                    const itemRect = item.getBoundingClientRect();
+                    if (checkCollision(playerRect, itemRect)) {
+                        carryingWaste = item;
+                        carryingWaste.style.top = playerPosition.y + 'px';
+                        carryingWaste.style.left = playerPosition.x + 'px';
+                    }
+                });
+            } else {
+                // If already carrying waste, try to dispose
+                disposeWaste();
             }
         }
-        return false;
-    }
 
-    // Function to calculate penalty based on Q-learning
-    function calculatePenalty(wasteType) {
-        const currentPenalty = qLearningPenalties[wasteType] || 0;
-        const penalty = Math.pow(2, currentPenalty) * 10; // Penalty increases exponentially
-        return penalty;
-    }
+        function disposeWaste() {
+            const binType = document.querySelector(`[data-type="${carryingWaste.getAttribute('data-type')}-bin"]`);
+            const binRect = binType.getBoundingClientRect();
+            const carryingWasteRect = carryingWaste.getBoundingClientRect();
 
-    // Function to update the score displayed in the score box
-    function updateScore() {
-        const scoreElement = document.getElementById('score');
-        scoreElement.textContent = score;
-    }
-});
-</script>
+            if (checkCollision(carryingWasteRect, binRect)) {
+                if (carryingWaste.getAttribute('data-type') === binType.getAttribute('data-type')) {
+                    updateScore();
+                } else {
+                    updatePenalty();
+                }
+                carryingWaste.parentNode.removeChild(carryingWaste);
+                carryingWaste = null;
+            }
+        }
+            
 
+        function checkCollision(rect1, rect2) {
+            return !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);
+        }
+
+        document.addEventListener('keydown', function (event) {
+            movePlayer(event.keyCode);
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.keyCode === 13) { // Enter key
+                collectWaste();
+            }
+        });
+    </script>
 </body>
+
 </html>
