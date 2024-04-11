@@ -91,12 +91,12 @@
         <span id="timer">Time: <span id="countdown">40</span> seconds</span>
     </div>
     <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
-    <img id="player" src="Images/player.png" style="position: absolute; top: 50%; left: 50px; width: 50px; height: 50px;">
+    <img id="player" src="Images/Level 2/man.jpg" style="position: absolute;  width: 50px; height: 200px;">
     <img id="waste1" src="Images/Level 2/plastic_bottle.png" class="waste-item" data-type="recyclable"
         title="Plastic Bottle" style="top: 700px; left: 400px;">
-    <img id="waste2" src="Images/Level 2/broken_glass.png" class="waste-item" data-type="non-recyclable"
+    <img id="waste2" src="Images/Level 2/brokken glass.png" class="waste-item" data-type="non-recyclable"
         title="Broken Glass" style="top: 650px; left: 600px;">
-    <img id="waste3" src="Images/Level 2/paper.png" class="waste-item" data-type="recyclable" title="Paper"
+    <img id="waste3" src="Images/Level 2/papper.png" class="waste-item" data-type="recyclable" title="Paper"
         style="top: 750px; left: 100px; height: 100px; width: 100px;">
     <img id="waste4" src="Images/Level 2/package.png" class="waste-item" data-type="non-recyclable" title="Package"
         style="top: 480px; left: 150px;height: 100px; width: 100px;">
@@ -106,7 +106,7 @@
         title="Plastic Pack" style="top: 400px; left: 1420px; height: 60px; width: 60px;">
     <img id="waste7" src="Images/Level 2/glass.png" class="waste-item" data-type="recyclable" title="Glass"
         style="top: 430px; left: 750px;height: 80px; width: 80px;">
-    <img id="waste8" src="Images/Level 2/paper_bag.png" class="waste-item" data-type="recyclable" title="Paper Bag"
+    <img id="waste8" src="Images/Level 2/paper bag.png" class="waste-item" data-type="recyclable" title="Paper Bag"
         style="top: 470px; left: 1300px; height: 60px; width: 60px;">
 
     <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable-bin">
@@ -114,12 +114,12 @@
         data-type="non-recyclable-bin">
 
     <script>
-        let countdown = 40;
-        let score = 0;
-        let penalty = 0;
-        let playerPosition = { x: 50, y: 50 };
-        let carryingWaste = null;
-        const playerSpeed = 10;
+    let countdown = 40;
+    let score = 0;
+    let penalty = 0;
+    let playerPosition = { x: 50, y: window.innerHeight - 250 }; // Updated initial position to lower left corner
+    let carryingWaste = null;
+    const playerSpeed = 10;
 
         const timerInterval = setInterval(updateTimer, 1000);
 
