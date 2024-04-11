@@ -38,8 +38,7 @@
             }
         }
 
-        #recyclable-bin,
-        #non-recyclable-bin {
+        .bin-image {
             width: 200px;
             cursor: pointer;
             position: fixed;
@@ -110,9 +109,9 @@
     <img id="waste8" src="Images/Level 2/paper_bag.png" class="waste-item" data-type="recyclable" title="Paper Bag"
         style="top: 470px; left: 1300px; height: 60px; width: 60px;">
 
-    <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable">
+    <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable-bin">
     <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image"
-        data-type="non-recyclable">
+        data-type="non-recyclable-bin">
 
     <script>
         let countdown = 40;
@@ -197,21 +196,23 @@
         }
 
         function disposeWaste() {
-            const binType = document.querySelector(`[data-type="${carryingWaste.getAttribute('data-type')}-bin"]`);
-            const binRect = binType.getBoundingClientRect();
+            const recyclableBinRect = document.getElementById('recyclable-bin').getBoundingClientRect();
+            const nonRecyclableBinRect = document.getElementById('non-recyclable-bin').getBoundingClientRect();
             const carryingWasteRect = carryingWaste.getBoundingClientRect();
 
-            if (checkCollision(carryingWasteRect, binRect)) {
-                if (carryingWaste.getAttribute('data-type') === binType.getAttribute('data-type')) {
+            if (checkCollision(carryingWasteRect, recyclableBinRect) || checkCollision(carryingWasteRect, nonRecyclableBinRect)) {
+                if (checkCollision(carryingWasteRect, recyclableBinRect) && carryingWaste.getAttribute('data-type') === 'recyclable') {
+                    updateScore();
+                } else if (checkCollision(carryingWasteRect, nonRecyclableBinRect) && carryingWaste.getAttribute('data-type') === 'non-recyclable') {
                     updateScore();
                 } else {
                     updatePenalty();
                 }
+
                 carryingWaste.parentNode.removeChild(carryingWaste);
                 carryingWaste = null;
             }
         }
-            
 
         function checkCollision(rect1, rect2) {
             return !(rect1.right < rect2.left ||
