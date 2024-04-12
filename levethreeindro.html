@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee+Spice&family=Honk&family=Rubik+Glitch+Pop&family=Rubik+Scribble&family=Sigmar+One&display=swap"
+        rel="stylesheet">
+
+<head>
+    <title>Green Gamify - Waste Management Introduction</title>
+    <style>
+        body {
+            background: url(Images/intro3/bc1.jpg) no-repeat center center fixed;
+            background-color: rgba(0, 0, 0, 0.7);
+            background-size: cover;
+            background-blend-mode: darken;
+            margin: 0;
+            padding: 0;
+            font-family: 'Trebuchet MS', sans-serif;
+            color: white;
+            transition: background-image 1s ease;
+        }
+
+        .name{
+            font-family: "Honk", system-ui;
+            font-size: 40px;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 80px;
+            right: 42%;       
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            top: 200px;
+            left: 5%;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            position: relative;
+        }
+        .level3 {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+
+        .avatar {
+            width: 250px;
+            opacity: .75;
+            height: auto;
+            position: absolute;
+            top: 250px;
+            left: 90%;
+            transform: translateX(-50%);
+        }
+
+        .intro-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            animation: fadeIn 3s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .next-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            animation: zoom-in-zoom-out 2s ease infinite;
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(.75, .75);
+            }
+
+            50% {
+                transform: scale(1, 1);
+            }
+
+            100% {
+                transform: scale(.75, .75);
+            }
+        }
+
+        .next-button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img src="Images/Level 3/level3.png" alt="Green Gamify Logo" class="level3">
+    <div class="name"> ' EcoSort ' </div>
+    <div class="container">
+
+        <div class="intro-text" id="intro1">
+            Welcome to the LEVEL 3! Follow these steps to learn how to play.
+
+        </div>
+        <div class="intro-text" id="intro2" style="display: none;">
+            The goal of the game is to correctly sort different types of waste into their respective piles within the
+            given time limit.
+        </div>
+        <div class="intro-text" id="intro3" style="display: none;">
+            There are three sorting piles: <b> PILE, PLASTIC PILE, and HAZARDOUS PILE</b>. Each pile is designated for a
+            specific type of waste: biofuel, plastic, or hazardous waste. To sort an item, drag and drop it into the
+            appropriate pile based on its type
+        </div>
+        <div class="intro-text" id="intro4" style="display: none;">
+            Your score starts at 0 points. Correctly sorting an item into its respective pile earns you 10 points.
+            Incorrectly sorting an item deducts points based on the number of times it has been wrongly sorted. Your
+            total score is displayed at the top right corner of the screen.
+        </div>
+        <div class="intro-text" id="intro5" style="display: none;">
+            You have 1 minute (60 seconds) to complete the sorting task. The timer begins as soon as you start playing
+            the game. Complete the sorting within the time limit to win the game.
+        </div>
+        <div class="intro-text" id="intro6" style="display: none;">
+            Successfully sort all the waste items into their respective piles and accumulate a total of 120 points to
+            win the game. If the time runs out before completing the sorting, the game ends, and you can try again.
+        </div>
+        <div class="intro-text" id="intro7" style="display: none;">
+            Enjoy the game and have fun testing your sorting skills!
+        </div>
+
+        <button class="next-button" onclick="nextIntro()">Next</button>
+    </div>
+
+    <script>
+        let currentIntro = 1;
+
+        function nextIntro() {
+            const currentElement = document.getElementById(`intro${currentIntro}`);
+            currentElement.style.display = 'none';
+
+            currentIntro++;
+
+            const nextElement = document.getElementById(`intro${currentIntro}`);
+            if (nextElement) {
+                nextElement.style.display = 'block';
+            } else {
+                window.location.href = "level3.html";
+            }
+
+            setTimeout(changeBackgroundImage, 1000);
+        }
+
+        function changeBackgroundImage() {
+            const currentImageNumber = currentIntro % 9; // Assuming you have 5 background images
+            document.body.style.backgroundImage = `url(Images/intro3/bc${currentImageNumber}.jpg)`;
+        }
+    </script>
+</body>
+
+</html>
