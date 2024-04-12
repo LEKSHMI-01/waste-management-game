@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Levels</title>
     <style>
-        
-        
         body {
             font-family: 'Trebuchet MS', sans-serif;
             background: url('Images/levello.jpg') no-repeat center center fixed;
@@ -22,12 +21,80 @@
             color: #fff;
         }
 
- 
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        .avt {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: 60px;
+            right: 1px;
+            animation: moveAndScale 20s linear infinite;
+            background-blend-mode: darken;
+        }
+
+        @keyframes moveAndScale {
+            0% {
+                left: 0;
+                /* Start from the left side */
+                transform: scale(1);
+                /* Initial scale */
+            }
+
+            100% {
+                left: calc(100% - 100px);
+                /* Move to the right side */
+                transform: scale(1);
+                /* Increase scale */
+            }
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+
 
 
         #game-container {
             text-align: center;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.605);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -36,19 +103,44 @@
         .level-button {
             padding: 15px 30px;
             font-size: 18px;
+            font-family: 'Trebuchet MS', sans-serif;
             margin: 10px;
             cursor: pointer;
             border-radius: 8px;
             transition: background-color 0.3s ease-in-out;
+            background-color: #51bc00;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+
         }
 
         .level-button:hover {
-            background-color: #27ae60;
+            background-color: #e5f37d;
+            color: black;
+            animation: zoom-in-zoom-out 2s ease infinite;
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(1, 1);
+            }
+
+            50% {
+                transform: scale(1.10, 1.10);
+            }
+
+            100% {
+                transform: scale(1, 1);
+            }
         }
 
         .level-button:disabled {
             background-color: #95a5a6;
             cursor: not-allowed;
+            color: white;
+            animation: none;
         }
 
         h1 {
@@ -63,88 +155,93 @@
         }
     </style>
 </head>
+
 <body>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img src="Images/fly.gif" class="avt">
+    <img src="Images/fly2.gif">
 
-<div id="game-container">
-    <h1>Choose Game Level</h1>
-    <div class="level-container">
-        <button class="level-button" onclick="startGame(1)">Level 1</button>
-        <button class="level-button" onclick="startLevel2()" id="level2" disabled>Level 2</button>
-        <button class="level-button" onclick="startLevel3()" id="level3" disabled>Level 3</button>
-        <button class="level-button" onclick="startLevel4()" id="level4" disabled>Level 4</button>
+    <div id="game-container">
+        <h1>Choose Game Level</h1>
+        <div class="level-container">
+            <button class="level-button" onclick="startGame(1)">Level 1</button>
+            <button class="level-button" onclick="startLevel2()" id="level2" disabled>Level 2</button>
+            <button class="level-button" onclick="startLevel3()" id="level3" disabled>Level 3</button>
+            <button class="level-button" onclick="startLevel4()" id="level4" disabled>Level 4</button>
+        </div>
     </div>
-</div>
 
-<script>
-    var unlockedLevels = 1; // Initially, only Level 1 is unlocked
-    const urlParams=new URLSearchParams(window.location.search);
-    const myparam=urlParams.get('level1');
+    <script>
+        var unlockedLevels = 1; // Initially, only Level 1 is unlocked
+        const urlParams = new URLSearchParams(window.location.search);
+        const myparam = urlParams.get('level1');
 
-    console.log(myparam)
-    
-    if (myparam === 'completed') completeLevel1()
+        console.log(myparam)
 
-    
-    const urlParamss=new URLSearchParams(window.location.search);
-    const myparamm=urlParams.get('level2');
-
-    console.log(myparamm)
-    
-    if (myparamm === 'completed') completeLevel2()
+        if (myparam === 'completed') completeLevel1()
 
 
+        const urlParamss = new URLSearchParams(window.location.search);
+        const myparamm = urlParams.get('level2');
 
-    const urlParamsss=new URLSearchParams(window.location.search);
-    const myparammm=urlParams.get('level3');
+        console.log(myparamm)
 
-    console.log(myparammm)
-    
-    if (myparammm === 'completed') completeLevel3()
-    
+        if (myparamm === 'completed') completeLevel2()
 
-    function startGame(level) {
-        if (level <= unlockedLevels) {
-            // Redirect to respective level page
-            // window.location.href = 'level' + level + '.html';
-            window.location.href = 'leveloneindro.html';
-        } else {
-            alert('You need to complete Level ' + (level - 1) + ' to unlock Level ' + level);
+
+
+        const urlParamsss = new URLSearchParams(window.location.search);
+        const myparammm = urlParams.get('level3');
+
+        console.log(myparammm)
+
+        if (myparammm === 'completed') completeLevel3()
+
+
+        function startGame(level) {
+            if (level <= unlockedLevels) {
+                // Redirect to respective level page
+                // window.location.href = 'level' + level + '.html';
+                window.location.href = 'leveloneindro.html';
+            } else {
+                alert('You need to complete Level ' + (level - 1) + ' to unlock Level ' + level);
+            }
         }
-    }
 
-    // Simulating completion of Level 1 (to be adjusted based on your actual game completion logic)
-    function completeLevel1() {
-        unlockedLevels = 2;
-        
+        // Simulating completion of Level 1 (to be adjusted based on your actual game completion logic)
+        function completeLevel1() {
+            unlockedLevels = 2;
 
-        document.getElementById('level2').disabled = false;
-    }
-    function startLevel2() {
-        // Redirect to Level 2 page
-        window.location.href = 'quizpage.html';
-    }
 
-    // Simulating completion of Level 2
-    function completeLevel2() {
-        unlockedLevels = 3;
-        document.getElementById('level2').disabled = false;
-        document.getElementById('level3').disabled = false;
-    }
-    function startLevel3(){
-        window.location.href = 'levethreeindro.html';
-    }
+            document.getElementById('level2').disabled = false;
+        }
+        function startLevel2() {
+            // Redirect to Level 2 page
+            window.location.href = 'quizpage.html';
+        }
 
-    // Simulating completion of Level 3
-    function completeLevel3() {
-        unlockedLevels = 4;
-        document.getElementById('level2').disabled = false;
-        document.getElementById('level3').disabled = false;
-        document.getElementById('level4').disabled = false;
-    }
-    function startLevel4() {
-        window.location.href = 'level 4.html';
-    }
-</script>
-  
+        // Simulating completion of Level 2
+        function completeLevel2() {
+            unlockedLevels = 3;
+            document.getElementById('level2').disabled = false;
+            document.getElementById('level3').disabled = false;
+        }
+        function startLevel3() {
+            window.location.href = 'levethreeindro.html';
+        }
+
+        // Simulating completion of Level 3
+        function completeLevel3() {
+            unlockedLevels = 4;
+            document.getElementById('level2').disabled = false;
+            document.getElementById('level3').disabled = false;
+            document.getElementById('level4').disabled = false;
+        }
+        function startLevel4() {
+            window.location.href = 'level 4.html';
+        }
+    </script>
+
 </body>
+
 </html>
