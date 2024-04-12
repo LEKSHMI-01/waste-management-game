@@ -1,172 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Waste Sorting Game</title>
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee+Spice&family=Honk&family=Rubik+Glitch+Pop&family=Rubik+Scribble&family=Sigmar+One&display=swap"
+        rel="stylesheet">
 
-    .container {
-        display: flex;
-        align-items: flex-start;
-    }
+    <title>Waste Sorting Game</title>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            animation: changeBackground 60s infinite linear;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.7);
+            background-size: cover;
+            background-blend-mode: darken;
 
-    .waste-container {
-        margin-left: 20px;
-    }
+        }
 
-    .waste {
-        width: 100px;
-        height: 100px;
-        border: 2px solid black;
-        margin: 10px;
-        display: inline-block;
-        cursor: pointer;
-        overflow: hidden; /* Ensure images fit within the container */
-    }
+        @keyframes changeBackground {
+            0% {
+                background-image: url('Images/Level 3/bc1.jpg');
+            }
 
-    .waste img {
-        width: 100%; /* Make the image fill the container */
-        height: 100%; /* Make the image fill the container */
-    }
+            20% {
+                background-image: url('Images/Level 3/bc2.jpg');
+            }
 
-    .pile-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-right: 20px;
-    }
+            40% {
+                background-image: url('Images/Level 3/bc3.jpg');
+            }
 
-    .pile {
-        position: relative;
-        width: 220px; /* Increased width to accommodate the border and padding */
-        height: 220px; /* Increased height to accommodate the border and padding */
-        border: 2px solid black;
-        margin: 10px;
-        padding: 10px;
-        overflow: auto;
-    }
+            60% {
+                background-image: url('Images/Level 3/bc4.jpg');
+            }
 
-    .pile::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 10px; /* Width of the growth marker */
-        height: 0; /* Initial height of the growth marker */
-        background-color: green; /* Color of the growth marker */
-        transition: height 0.5s; /* Smooth transition for height changes */
-    }
+            80% {
+                background-image: url('Images/Level 3/bc5.jpg');
+            }
 
-    .hovered {
-        border: 2px dashed red;
-    }
+            100% {
+                background-image: url('Images/Level 3/bc6.jpg');
+            }
+        }
 
-    .dragging {
-        opacity: 0.5;
-    }
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+        .name{
+            font-family: "Honk", system-ui;
+            font-size: 40px;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            right: 43%;       
+        }
 
-    .game-over-message {
-        display: none;
-        font-weight: bold;
-        color: green;
-    }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin-top: 200px;
+        }
 
-    .waste-name {
-        font-size: 10px;
-        color: blue;
-    }
+        .pile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
 
-    /* Add styles for the point box and timer */
-    .game-info {
-        position: fixed;
-        bottom: 10px;
-        left: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+        .pile {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border: 2px solid #333;
+            margin: 10px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+        }
 
-    #points {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
+        .pile img {
+            max-width: 100%;
+            max-height: 100%;
+        }
 
-    #timer {
-        font-size: 18px;
-    }
+        .waste-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 150px;
+            padding: 10px;
+            border-top: 2px solid #333;
+        }
 
-    #try-again-button {
-        display: none;
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-</style>
+        .waste {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #333;
+            margin: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            background-color: #fff;
+            transition: transform 0.3s ease;
+            animation: moveWaste 5s infinite alternate;
+        }
+
+        .waste img {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes moveWaste {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(20px);
+            }
+        }
+
+        .game-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #points,
+        #timer {
+            font-family: "Honk", system-ui;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .hovered {
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .dragging {
+            opacity: 0.7;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-family: "Anton", sans-serif;
+            font-size: 100px;
+            transform: translate(-50%, -50%);
+            padding: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .pile-name {
+            color: white;
+            font-size: 20px;
+            margin-top: 5px;
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- Add the game info container for points and timer -->
-<div class="game-info">
-    <div id="points">Points: 0</div>
-    <div id="timer">Time Left: 1:00</div>
-    <button id="try-again-button">Try Again</button>
-</div>
-
-<div class="container">
-    <div class="pile-container">
-        <div class="pile" id="pile1">Biofuel Pile</div>
-        <div class="growth-marker" id="biofuel-growth"></div>
-        <div id="pile1_box" class="pile-box">
-            <h3>BIOfuel Pile</h3>
-            <div class="control-container">
-                <label for="pile1-temp">Temperature:</label>
-                <input id="pile1-temp" type="range" min="0" max="100" value="50">
-            </div>
-            <div class="control-container">
-                <label for="pile1-pressure">Pressure:</label>
-                <input id="pile1-pressure" type="range" min="0" max="100" value="50">
-            </div>
-        </div>
+    <img src="Images/Level 3/logolevel3.png" alt="Green Gamify Logo" class="logo">
+    <div class="name"> ' EcoSort ' </div>
+    <div class="game-info">
+        Points<div id="points">0</div>
+        Time Left<div id="timer"> 1:00</div>
     </div>
 
-    <div class="pile-container">
-        <div class="pile" id="pile2">Plastic Pile</div>
-        <div class="growth-marker" id="plastic-growth"></div>
-        <div id="pile2_box" class="pile-box">
-            <h3>Plastic Pile</h3>
-            <div class="control-container">
-                <label for="pile2-temp">Temperature:</label>
-                <input id="pile2-temp" type="range" min="0" max="100" value="50">
+    <div class="container">
+        <div class="pile-container">
+            <div class="pile" id="pile1">
+                <img src="Images/Level 3/Biogas.png" alt="Biofuel">
             </div>
-            <div class="control-container">
-                <label for="pile2-pressure">Pressure:</label>
-                <input id="pile2-pressure" type="range" min="0" max="100" value="50">
-            </div>
+            <div class="pile-name">BIO PILE</div>
         </div>
-    </div>
 
-    <div class="pile-container">
-        <div class="pile" id="hazardous-pile">Hazardous Waste Pile</div>
-        <div class="growth-marker" id="hazardous-growth"></div>
-        <div id="hazardous-waste-box" class="pile-box">
-            <h3>Hazardous Waste Disposal Pile</h3>
-            <div class="control-container">
-                <label for="hazardous-temp">Temperature:</label>
-                <input id="hazardous-temp" type="range" min="0" max="100" value="50">
+        <div class="pile-container">
+            <div class="pile" id="pile2">
+                <img src="Images/Level 3/Plastic extrusion machine.png" alt="Plastic Pile">
             </div>
-            <div class="control-container">
-                <label for="hazardous-pressure">Pressure:</label>
-                <input id="hazardous-pressure" type="range" min="0" max="100" value="50">
+            <div class="pile-name">PLASTIC PILE</div>
+        </div>
+
+        <div class="pile-container">
+            <div class="pile" id="hazardous-pile">
+                <img src="Images/Level 3/incinerator.png" alt="Hazardous Waste Pile">
             </div>
+            <div class="pile-name">HAZARDOUS PILE</div>
         </div>
     </div>
 
@@ -209,148 +255,144 @@
         <div class="waste" id="chemicals" draggable="true" data-name="Chemicals" data-pile="hazardous-pile">
             <img src="Images/Level 3/Chemicals.png" title="Chemicals">
         </div>
+
     </div>
-</div>
 
-<div class="game-over-message" id="game-over-message">Level Complete! Congratulations!</div>
+    <!-- Add a div to display popups -->
+    <div id="popup-container"></div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const wastes = document.querySelectorAll('.waste');
-    const piles = document.querySelectorAll('.pile');
-    const growthMarkers = document.querySelectorAll('.growth-marker');
-    const gameOverMessage = document.getElementById('game-over-message');
-    const pointsDisplay = document.getElementById('points');
-    const timerDisplay = document.getElementById('timer');
-    const tryAgainButton = document.getElementById('try-again-button');
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const wastes = document.querySelectorAll('.waste');
+            const piles = document.querySelectorAll('.pile');
+            const pointsDisplay = document.getElementById('points');
+            const timerDisplay = document.getElementById('timer');
+            const popupContainer = document.getElementById('popup-container');
 
-    let gameCompleted = false;
-    let points = 0;
-    let timeLeft = 60; // 1 minute in seconds
-    let penalties = {}; // Store penalties for wrongly sorted items
+            let points = 0;
+            let timeLeft = 60; // 1 minute in seconds
+            let penalties = {}; // Store penalties for wrongly sorted items
 
-    // Start the timer
-    const timerInterval = setInterval(updateTimer, 1000);
+            // Start the timer
+            const timerInterval = setInterval(updateTimer, 1000);
 
-    // Update timer display every second
-    function updateTimer() {
-        timeLeft--;
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            // Update timer display every second
+            function updateTimer() {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = ` ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-        if (timeLeft === 0) {
-            clearInterval(timerInterval);
-            endGame();
-        }
-    }
-
-    wastes.forEach(waste => {
-        waste.addEventListener('dragstart', dragStart);
-        waste.addEventListener('dragend', dragEnd);
-    });
-
-    piles.forEach(pile => {
-        pile.addEventListener('dragover', dragOver);
-        pile.addEventListener('dragenter', dragEnter);
-        pile.addEventListener('dragleave', dragLeave);
-        pile.addEventListener('drop', drop);
-    });
-
-    function dragStart() {
-        this.classList.add('dragging');
-    }
-
-    function dragEnd() {
-        this.classList.remove('dragging');
-        if (!gameCompleted) {
-            checkPiles();
-        }
-    }
-
-    function dragOver(e) {
-        e.preventDefault();
-    }
-
-    function dragEnter(e) {
-        e.preventDefault();
-        this.classList.add('hovered');
-    }
-
-    function dragLeave() {
-        this.classList.remove('hovered');
-    }
-
-    function drop(e) {
-        if (gameCompleted) return;
-
-        const draggedWaste = document.querySelector('.dragging');
-        const correctPile = draggedWaste.dataset.pile;
-
-        // Check if the dropped item belongs to the correct pile
-        if (this.id === correctPile) {
-            this.appendChild(draggedWaste);
-            updateGrowthMarker(this.id); // Update growth marker for the correct pile
-            points += 10; // Increase points for correct sorting
-            pointsDisplay.textContent = `Points: ${points}`;
-            if (penalties.hasOwnProperty(draggedWaste.id)) {
-                delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
             }
-        } else {
-            if (!penalties.hasOwnProperty(draggedWaste.id)) {
-                penalties[draggedWaste.id] = 10; // Set initial penalty if item is sorted wrongly for the first time
-            } else {
-                penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
+
+            // Function to display popup
+            function showPopup(message, isPositive) {
+                const popup = document.createElement('div');
+                popup.classList.add('popup');
+                popup.textContent = message;
+                popup.style.color = isPositive ? 'green' : 'red';
+                popupContainer.appendChild(popup);
+
+                // Remove popup after 2 seconds
+                setTimeout(() => {
+                    popup.remove();
+                }, 2000);
             }
-            points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
-            pointsDisplay.textContent = `Points: ${points}`;
-        }
-    }
 
-    function updateGrowthMarker(pileId) {
-        const pileIndex = Array.from(piles).findIndex(pile => pile.id === pileId);
-        const growthMarker = growthMarkers[pileIndex];
-        growthMarker.style.height = parseInt(growthMarker.style.height || 0) + 20 + 'px';
-    }
+            wastes.forEach(waste => {
+                waste.addEventListener('dragstart', dragStart);
+                waste.addEventListener('dragend', dragEnd);
+            });
 
-    function checkPiles() {
-        const biofuels = ['wheat-straw', 'paper-waste', 'algea', 'food-waste'];
-        const plastics = ['pet-bottles', 'cosmetics', 'ldpe-cover', 'plastic-medical'];
-        const hazardousWastes = ['battery', 'pesticides', 'e-waste', 'chemicals'];
+            piles.forEach(pile => {
+                pile.addEventListener('dragover', dragOver);
+                pile.addEventListener('dragenter', dragEnter);
+                pile.addEventListener('dragleave', dragLeave);
+                pile.addEventListener('drop', drop);
+            });
 
-        const pile1Contents = Array.from(piles[0].children).map(child => child.id);
-        const pile2Contents = Array.from(piles[1].children).map(child => child.id);
-        const hazardousPileContents = Array.from(piles[2].children).map(child => child.id);
+            function dragStart() {
+                this.classList.add('dragging');
+            }
 
-        const isBiofuelPileCorrect = biofuels.every(waste => pile1Contents.includes(waste));
-        const isPlasticPileCorrect = plastics.every(waste => pile2Contents.includes(waste));
-        const isHazardousPileCorrect = hazardousWastes.every(waste => hazardousPileContents.includes(waste));
+            function dragEnd() {
+                this.classList.remove('dragging');
+                checkPiles();
+            }
 
-        if (isBiofuelPileCorrect && isPlasticPileCorrect && isHazardousPileCorrect) {
-            gameCompleted = true;
-            showGameOverMessage();
-            clearInterval(timerInterval); // Stop the timer when game is completed
-        }
-    }
+            function dragOver(e) {
+                e.preventDefault();
+            }
 
-    function showGameOverMessage() {
-        gameOverMessage.style.display = 'block';
-        tryAgainButton.style.display = 'block'; // Show the try again button
-        tryAgainButton.addEventListener('click', tryAgain);
-    }
+            function dragEnter(e) {
+                e.preventDefault();
+                this.classList.add('hovered');
+            }
 
-    function tryAgain() {
-        window.location.reload(); // Reload the page to restart the game
-    }
+            function dragLeave() {
+                this.classList.remove('hovered');
+            }
 
-    function endGame() {
-        gameCompleted = true;
-        clearInterval(timerInterval);
-        gameOverMessage.textContent = 'Time Up! Try Again!';
-        showGameOverMessage();
-    }
-});
-</script>
+            function drop(e) {
+                const draggedWaste = document.querySelector('.dragging');
+                const correctPile = draggedWaste.dataset.pile;
+
+                // Check if the dropped item belongs to the correct pile
+                if (this.id === correctPile) {
+                    this.appendChild(draggedWaste);
+                    points += 10; // Increase points for correct sorting
+                    pointsDisplay.textContent = `   ${points}`;
+                    showPopup('+10', true); // Display popup for points increment
+                    if (penalties.hasOwnProperty(draggedWaste.id)) {
+                        delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
+                    }
+                } else {
+                    if (!penalties.hasOwnProperty(draggedWaste.id)) {
+                        penalties[draggedWaste.id] = 10; // Set initial penalty if item is sorted wrongly for the first time
+                    } else {
+                        penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
+                    }
+                    points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
+                    pointsDisplay.textContent = `${points}`;
+                    showPopup(-penalties[draggedWaste.id], false); // Display popup for points decrement
+                }
+            }
+
+            function checkPiles() {
+                const biofuels = ['wheat-straw', 'paper-waste', 'algea', 'food-waste'];
+                const plastics = ['pet-bottles', 'cosmetics', 'ldpe-cover', 'plastic-medical'];
+                const hazardousWastes = ['battery', 'pesticides', 'e-waste', 'chemicals'];
+
+                const pile1Contents = Array.from(piles[0].children).map(child => child.id);
+                const pile2Contents = Array.from(piles[1].children).map(child => child.id);
+                const hazardousPileContents = Array.from(piles[2].children).map(child => child.id);
+
+                const isBiofuelPileCorrect = biofuels.every(waste => pile1Contents.includes(waste));
+                const isPlasticPileCorrect = plastics.every(waste => pile2Contents.includes(waste));
+                const isHazardousPileCorrect = hazardousWastes.every(waste => hazardousPileContents.includes(waste));
+
+                if (isBiofuelPileCorrect && isPlasticPileCorrect && isHazardousPileCorrect) {
+                    clearInterval(timerInterval); // Stop the timer when game is completed
+                    if (points === 120) {
+                        window.location.href = '3congratulations.html?points=' + points;
+                    } else {
+                        window.location.href = '3try_again.html?points=' + points;
+                    }
+                }
+            }
+
+            function endGame() {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Time Up!';
+                window.location.href = '3tryagain.html?points=' + points;
+            }
+        });
+    </script>
 
 </body>
+
 </html>
