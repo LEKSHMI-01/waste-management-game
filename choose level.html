@@ -71,7 +71,7 @@
         <button class="level-button" onclick="startGame(1)">Level 1</button>
         <button class="level-button" onclick="startLevel2()" id="level2" disabled>Level 2</button>
         <button class="level-button" onclick="startLevel3()" id="level3" disabled>Level 3</button>
-        <button class="level-button" onclick="startGame(4)" id="level4" disabled>Level 4</button>
+        <button class="level-button" onclick="startLevel4()" id="level4" disabled>Level 4</button>
     </div>
 </div>
 
@@ -92,6 +92,15 @@
     
     if (myparamm === 'completed') completeLevel2()
 
+
+
+    const urlParamsss=new URLSearchParams(window.location.search);
+    const myparammm=urlParams.get('level3');
+
+    console.log(myparammm)
+    
+    if (myparammm === 'completed') completeLevel3()
+    
 
     function startGame(level) {
         if (level <= unlockedLevels) {
@@ -128,7 +137,12 @@
     // Simulating completion of Level 3
     function completeLevel3() {
         unlockedLevels = 4;
+        document.getElementById('level2').disabled = false;
+        document.getElementById('level3').disabled = false;
         document.getElementById('level4').disabled = false;
+    }
+    function startLevel4() {
+        window.location.href = 'level 4.html';
     }
 </script>
   
