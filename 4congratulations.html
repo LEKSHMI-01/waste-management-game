@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations!</title>
+    <script src="choose level.html"></script>
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background-image: url('Images/Level 2/congrats.png');
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.708);
+            background-blend-mode: darken;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.523);
+            /* Darken the background */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative; /* Added for positioning */
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        h1 {
+            color: #fefefe;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #898e93;
+            margin-bottom: 30px;
+        }
+
+        .score {
+            font-size: 20px;
+            color: #b5b3b3;
+        }
+
+        /* Added CSS for the button */
+        .continue-btn {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* Button hover effect */
+        .continue-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <div class="container">
+        
+        <h1>CONGRATULATIONS!</h1>
+        <p>You completed the level successfully!</p>
+        <p class="score">Your score: <span id="score"></span></p>
+
+        <!-- Added button -->
+        <button class="continue-btn" onclick="redirectToChooseLevel()">Continue</button>
+
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const score = urlParams.get('score');
+            document.getElementById('score').innerText = score;
+
+            // Function to redirect to chooselevel.html
+            function redirectToChooseLevel() {
+                
+                window.location.href = 'choose level.html?level3=completed';
+                document.getElementById('level4').disabled = false;
+            }
+        </script>
+    </div>
+</body>
+
+</html>
