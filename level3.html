@@ -273,35 +273,10 @@
             let timeLeft = 60; // 1 minute in seconds
             let penalties = {}; // Store penalties for wrongly sorted items
 
-            // Start the timer
-            const timerInterval = setInterval(updateTimer, 1000);
-
-            // Update timer display every second
-            function updateTimer() {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                timerDisplay.textContent = ` ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-                if (timeLeft === 0) {
-                    clearInterval(timerInterval);
-                    endGame();
-                }
-            }
-
-            // Function to display popup
-            function showPopup(message, isPositive) {
-                const popup = document.createElement('div');
-                popup.classList.add('popup');
-                popup.textContent = message;
-                popup.style.color = isPositive ? 'green' : 'red';
-                popupContainer.appendChild(popup);
-
-                // Remove popup after 2 seconds
-                setTimeout(() => {
-                    popup.remove();
-                }, 2000);
-            }
+            // Q-learning parameters
+            const alpha = 0.5;
+            const gamma = 0.9;
+            const epsilon = 0.1;
 
             wastes.forEach(waste => {
                 waste.addEventListener('dragstart', dragStart);
@@ -345,8 +320,7 @@
                 if (this.id === correctPile) {
                     this.appendChild(draggedWaste);
                     points += 10; // Increase points for correct sorting
-                    pointsDisplay.textContent = `   ${points}`;
-                    showPopup('+10', true); // Display popup for points increment
+                    pointsDisplay.textContent = points;
                     if (penalties.hasOwnProperty(draggedWaste.id)) {
                         delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
                     }
@@ -357,9 +331,14 @@
                         penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
                     }
                     points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
-                    pointsDisplay.textContent = `${points}`;
-                    showPopup(-penalties[draggedWaste.id], false); // Display popup for points decrement
+                    pointsDisplay.textContent = points;
                 }
+
+                // Update Q-values
+                const currentState = getState();
+                updateQValue(currentState, this.id, points);
+
+                showPopup(this.id === correctPile ? '+10' : '-10', this.id === correctPile);
             }
 
             function checkPiles() {
@@ -383,6 +362,37 @@
                         window.location.href = '3try_again.html?points=' + points;
                     }
                 }
+            }
+
+            function getState() {
+                const pile1Contents = Array.from(piles[0].children).map(child => child.id);
+                const pile2Contents = Array.from(piles[1].children).map(child => child.id);
+                const hazardousPileContents = Array.from(piles[2].children).map(child => child.id);
+
+                const state = [];
+                state.push(pile1Contents.join(','));
+                state.push(pile2Contents.join(','));
+                state.push(hazardousPileContents.join(','));
+
+                return state.join('|');
+            }
+
+            function updateQValue(state, action, reward) {
+                // Retrieve Q-value for the current state-action pair
+                let qValue = localStorage.getItem(state);
+                if (!qValue) {
+                    qValue = {};
+                } else {
+                    qValue = JSON.parse(qValue);
+                }
+
+                // Update Q-value using Q-learning formula
+                qValue[action] = qValue[action] || 0;
+                const maxNextQValue = Math.max(...Object.values(qValue));
+                qValue[action] += alpha * (reward + gamma * maxNextQValue - qValue[action]);
+
+                // Store the updated Q-value for the current state-action pair
+                localStorage.setItem(state, JSON.stringify(qValue));
             }
 
             function endGame() {
