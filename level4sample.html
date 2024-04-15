@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Character Walking Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        camera.position.set(0, 0, 5); // Set the camera position
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        mainLight.position.set(10, 10, 10);
+        scene.add(mainLight);
+        renderer.setClearColor(0x000000); // Set background color (black)
+
+
+
+
+
+        // Load your character model (replace 'path/to/your/model.glb' with the actual path)
+        const loader = new THREE.GLTFLoader();  
+        let character;
+
+        loader.load('C:/Users/nakul/Download/sman.glb', (gltf) => {
+            character = gltf.scene;
+            scene.add(character);
+            // Set initial position, scale, etc.
+            // Add animations if available
+        });
+
+        // Set up camera position
+        camera.position.set(0, 2, 5);
+
+        // Basic movement controls (you can customize these)
+        const moveSpeed = 0.1;
+        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            // Update character position based on keys
+            if (keys.ArrowUp) character.position.z -= moveSpeed;
+            if (keys.ArrowDown) character.position.z += moveSpeed;
+            if (keys.ArrowLeft) character.position.x -= moveSpeed;
+            if (keys.ArrowRight) character.position.x += moveSpeed;
+
+            renderer.render(scene, camera);
+        };
+
+        animate();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+    </script>
+</body>
+
+</html>
