@@ -278,6 +278,34 @@
             const gamma = 0.9;
             const epsilon = 0.1;
 
+            const timerInterval = setInterval(updateTimer, 1000);
+            // Update timer display every second
+            function updateTimer() {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = ` ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }
+
+             // Function to display popup
+             function showPopup(message, isPositive) {
+                const popup = document.createElement('div');
+                popup.classList.add('popup');
+                popup.textContent = message;
+                popup.style.color = isPositive ? 'green' : 'red';
+                popupContainer.appendChild(popup);
+
+                // Remove popup after 2 seconds
+                setTimeout(() => {
+                    popup.remove();
+                }, 800);
+            }
+
             wastes.forEach(waste => {
                 waste.addEventListener('dragstart', dragStart);
                 waste.addEventListener('dragend', dragEnd);
@@ -320,7 +348,8 @@
                 if (this.id === correctPile) {
                     this.appendChild(draggedWaste);
                     points += 10; // Increase points for correct sorting
-                    pointsDisplay.textContent = points;
+                    pointsDisplay.textContent = `   ${points}`;
+                    showPopup('+10', true);
                     if (penalties.hasOwnProperty(draggedWaste.id)) {
                         delete penalties[draggedWaste.id]; // Reset penalty if item is sorted correctly
                     }
@@ -331,14 +360,15 @@
                         penalties[draggedWaste.id] += 10; // Increase penalty if item is sorted wrongly again
                     }
                     points -= penalties[draggedWaste.id]; // Decrease points for incorrect sorting
-                    pointsDisplay.textContent = points;
+                    pointsDisplay.textContent = `${points}`;
+                    showPopup(-penalties[draggedWaste.id], false);
                 }
 
                 // Update Q-values
                 const currentState = getState();
                 updateQValue(currentState, this.id, points);
 
-                showPopup(this.id === correctPile ? '+10' : '-10', this.id === correctPile);
+                //showPopup(this.id === correctPile ? '+10' : '-10', this.id === correctPile);
             }
 
             function checkPiles() {
