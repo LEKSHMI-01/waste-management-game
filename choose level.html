@@ -153,6 +153,24 @@
             justify-content: space-around;
             flex-wrap: wrap;
         }
+
+        /* Style for the login button */
+        #login-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #login-button:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 
@@ -160,6 +178,9 @@
     <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
     <img src="Images/fly.gif" class="avt">
     <img src="Images/fly2.gif">
+
+    <!-- Login button -->
+    <button id="login-button" onclick="goToLogin()">Sign out</button>
 
     <div id="game-container">
         <h1>Choose Game Level</h1>
@@ -173,6 +194,12 @@
 
     <script>
         var unlockedLevels = 1; // Initially, only Level 1 is unlocked
+
+        // Function to redirect to the login page
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const myparam = urlParams.get('level1');
 
