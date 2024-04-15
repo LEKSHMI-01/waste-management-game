@@ -87,6 +87,9 @@
 
     <script>
         // JavaScript code to retrieve and display the score from the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const points = urlParams.get('score');
+        document.getElementById('score').innerText = points;
 
         // Redirect to level2.html when Try Again button is clicked
         document.querySelector('.try-again-button').addEventListener('click', function () {
