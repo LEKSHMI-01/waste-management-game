@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adventure Selection</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      background: url(Images/intro3/bc8.jpg) no-repeat center center fixed;
+      background-color: rgba(0, 0, 0, 0.822);
+      background-size: cover;
+      background-blend-mode: darken;
       margin: 0;
       padding: 0;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: white;
     }
 
     .container {
@@ -16,6 +22,56 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      flex-direction: column; /* Align items in a column */
+    }
+
+    .level4 {
+      width: 100px;
+      height: auto;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .logo {
+      width: 150px;
+      height: auto;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      animation: wiggle 4s linear infinite;
+    }
+
+    @keyframes wiggle {
+      0%,
+      7% {
+        transform: rotateZ(0);
+      }
+
+      15% {
+        transform: rotateZ(-15deg);
+      }
+
+      20% {
+        transform: rotateZ(10deg);
+      }
+
+      25% {
+        transform: rotateZ(-10deg);
+      }
+
+      30% {
+        transform: rotateZ(6deg);
+      }
+
+      35% {
+        transform: rotateZ(-4deg);
+      }
+
+      40%,
+      100% {
+        transform: rotateZ(0);
+      }
     }
 
     .box {
@@ -23,22 +79,74 @@
       height: 200px;
       margin: 20px;
       cursor: pointer;
+      transition: transform 0.3s ease;
+      /* Smooth transition effect */
+      position: relative;
+    }
+
+    /* Apply animations on hover */
+    .box:hover {
+      transform: scale(1.1);
+      /* Scale up on hover */
+    }
+
+    .box-text1 {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bolder;
+    }
+
+    .box-text2 {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 20px;
+      color: rgb(0, 25, 76);
+      font-weight: bolder;
     }
 
     .blue {
-      background-image:url('Images/intro4/bc6.jpg')
+      background-image: url('Images/intro4/bc6.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      /* Add rounded corners */
     }
 
     .green {
-        background-image: url('Images/Level 4/sae2.gif');
+      background-image: url('Images/Level 4/sae2.gif');
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      /* Add rounded corners */
+    }
 
+    h1 {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px; /* Add some spacing below the heading */
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <div class="box blue" onclick="goTo('level 4.html')"></div>
-    <div class="box green" onclick="goTo('level4marine.html')"></div>
+    <h1>Choose your terrain!</h1> <!-- Add the heading here -->
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img src="Images/Level 4/level4.png" alt="Green Gamify Logo" class="level4">
+    <!-- Add class "box" to each adventure box -->
+    <div class="box blue" onclick="goTo('level 4.html')">
+      <div class="box-text1">LAND</div>
+    </div>
+    <div class="box green" onclick="goTo('level4marine.html')">
+      <div class="box-text2">MARINE</div>
+    </div>
   </div>
 
   <script>
@@ -47,4 +155,5 @@
     }
   </script>
 </body>
+
 </html>
