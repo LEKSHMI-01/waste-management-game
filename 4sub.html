@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adventure Selection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      width: 200px;
+      height: 200px;
+      margin: 20px;
+      cursor: pointer;
+    }
+
+    .blue {
+      background-image:url('Images/intro4/bc6.jpg')
+    }
+
+    .green {
+        background-image: url('Images/Level 4/sae2.gif');
+
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box blue" onclick="goTo('level 4.html')"></div>
+    <div class="box green" onclick="goTo('level4marine.html')"></div>
+  </div>
+
+  <script>
+    function goTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>
