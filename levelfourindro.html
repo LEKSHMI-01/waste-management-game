@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee+Spice&family=Honk&family=Rubik+Glitch+Pop&family=Rubik+Scribble&family=Sigmar+One&display=swap"
+    rel="stylesheet">
+
+<head>
+    <title>Green Gamify - Waste Management Introduction</title>
+    <style>
+        body {
+            background: url(Images/intro4/bc1.jpg) no-repeat center center fixed;
+            background-color: rgba(0, 0, 0, 0.7);
+            background-size: cover;
+            background-blend-mode: darken;
+            margin: 0;
+            padding: 0;
+            font-family: 'Trebuchet MS', sans-serif;
+            color: white;
+            transition: background-image 1s ease;
+        }
+
+        .name {
+            font-family: "Honk", system-ui;
+            font-size: 40px;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 80px;
+            right: 42%;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            top: 200px;
+            left: 5%;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .level3 {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+
+        .avatar {
+            width: 250px;
+            opacity: .75;
+            height: auto;
+            position: absolute;
+            top: 250px;
+            left: 90%;
+            transform: translateX(-50%);
+        }
+
+        .intro-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            animation: fadeIn 3s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .next-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2ecc71;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            animation: zoom-in-zoom-out 2s ease infinite;
+        }
+
+        @keyframes zoom-in-zoom-out {
+            0% {
+                transform: scale(.75, .75);
+            }
+
+            50% {
+                transform: scale(1, 1);
+            }
+
+            100% {
+                transform: scale(.75, .75);
+            }
+        }
+
+        .next-button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img src="Images/Level 4/level4.png" alt="Green Gamify Logo" class="level3">
+    <div class="container">
+
+        <div class="intro-text" id="intro1">
+            Welcome to the LEVEL 4! Follow these steps to learn how to play.
+
+        </div>
+        <div class="intro-text" id="intro2" style="display: none;">
+            Earn points for each correctly sorted item and progress through levels to become a waste sorting champion!
+        </div>
+        <div class="intro-text" id="intro3" style="display: none;">
+            Use the <b> arrow keys (← ↑ → ↓) </b> to move your character around the game environment.
+        </div>
+        <div class="intro-text" id="intro4" style="display: none;">
+            Position your character over a waste item and press the Enter key to pick it up.
+        </div>
+        <div class="intro-text" id="intro5" style="display: none;">
+            Earn 10 points for each waste item correctly sorted into the appropriate bin.
+            Be careful! You'll incur a penalty if you dispose of an item in the wrong bin, deducting 10 points from your
+            score.
+        </div>
+        <div class="intro-text" id="intro6" style="display: none;">
+            Keep an eye on the timer at the top right corner of the screen. If time runs out, the game will end.
+        </div>
+        <div class="intro-text" id="intro7" style="display: none;">
+            Now, it's time to put your waste sorting skills to the test and make a positive impact on the environment!
+        </div>
+
+        <button class="next-button" onclick="nextIntro()">Next</button>
+    </div>
+
+    <script>
+        let currentIntro = 1;
+
+        function nextIntro() {
+            const currentElement = document.getElementById(`intro${currentIntro}`);
+            currentElement.style.display = 'none';
+
+            currentIntro++;
+
+            const nextElement = document.getElementById(`intro${currentIntro}`);
+            if (nextElement) {
+                nextElement.style.display = 'block';
+            } else {
+                window.location.href = "level3.html";
+            }
+
+            setTimeout(changeBackgroundImage, 1000);
+        }
+
+        function changeBackgroundImage() {
+            const currentImageNumber = currentIntro % 9; // Assuming you have 5 background images
+            document.body.style.backgroundImage = `url(Images/intro4/bc${currentImageNumber}.jpg)`;
+        }
+    </script>
+</body>
+
+</html>
