@@ -12,7 +12,7 @@
             background-color: rgba(0, 0, 0, 0.708);
             background-blend-mode: darken;
             background-size: cover;
-            background-repeat:no-repeat;
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
             display: flex;
@@ -184,14 +184,18 @@
                     playerPosition.y -= playerSpeed;
                     break;
                 case 39: // Right arrow
-                    playerPosition.x += playerSpeed;
-                    if (!isFacingRight) {
-                        document.getElementById('player').style.transform = 'scaleX(-1)';
-                        isFacingRight = true;
+                    if (playerPosition.x + playerSpeed + 150 < window.innerWidth) { // 150 is the width of the fish
+                        playerPosition.x += playerSpeed;
+                        if (!isFacingRight) {
+                            document.getElementById('player').style.transform = 'scaleX(-1)';
+                            isFacingRight = true;
+                        }
                     }
                     break;
                 case 40: // Down arrow
-                    playerPosition.y += playerSpeed;
+                    if (playerPosition.y + playerSpeed + 190 < window.innerHeight) { // 190 is the height of the fish
+                        playerPosition.y += playerSpeed;
+                    }
                     break;
 
             }
