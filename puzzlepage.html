@@ -1,178 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match-3 Recycling Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Scramble Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
 
-        #gameBoard {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 5px;
-            max-width: 1500px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
+    #word {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
 
-        .waste-item {
-            width: 200px;
-            height: 200px;
-            cursor: pointer;
-            border-radius: 5px;
-            background-position: center;
-            transition: transform 0.2s;
-        }
+    #scrambled-word {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
 
-        .waste-item:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    #hint {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
 </head>
-
 <body>
-    <div id="gameBoard"></div>
+<h1>Word Scramble Game</h1>
+<p>Unscramble the word:</p>
+<div id="scrambled-word"></div>
+<p id="hint"></p>
+<input type="text" id="user-input" placeholder="Your guess..." style="letter-spacing: 2px;">
+<button onclick="checkGuess()">Check</button>
+<p id="result"></p>
 
-    <script>
-        const wasteItems = [
-            { name: 'Plastic Bottle', image: 'Images/l1plastic bottle.jpg', recyclable: true },
-            { name: 'Broken Glass', image: 'Images/l1broken glass.jfif', recyclable: false },
-            { name: 'Glass', image: 'Images/l1glass1.png', recyclable: true },
-            { name: 'Bubble Wrap', image: 'Images/l1bubble wrap 2.jfif', recyclable: false },
-            { name: 'PVC', image: 'Images/l1pvc1.jfif', recyclable: true },
-            { name: 'Newspaper', image: 'Images/l1newspaper.jfif', recyclable: true },
-            { name: 'Cigarette Butts', image: 'Images/l1cigarette butts.jfif', recyclable: false },
-            { name: 'Battery', image: 'Images/l1battery2.jfif', recyclable: true },
-            { name: 'Can', image: 'Images/l1can1.jfif', recyclable: true },
-            { name: 'Tetra Pack', image: 'Images/l1tetra pack.jfif', recyclable: false },
-            { name: 'Carbon Paper', image: 'Images/l1carbon paper.jfif', recyclable: false },
-            { name: 'Cardboard Package', image: 'Images/l1carboard package.jfif', recyclable: true }
-        ];
-        const gameBoard = document.getElementById('gameBoard');
+<script>
+    const words = ['WHEAT STRAW', 'LDPE COVER', 'CHEMICALS', 'BATTERY','PAPER WASTE', 'PET BOTTLES', 'E-WASTE', 'COSMETICS', 'FOOD WASTE', 'PLASTIC MEDICAL', 'PESTICIDES', 'ALGAE'];
+    let currentWordIndex = 0;
+    let currentWord = '';
+    let scrambledWord = '';
 
-        function createGameBoard() {
-            for (let i = 0; i < 36; i++) {
-                const randomIndex = Math.floor(Math.random() * wasteItems.length);
-                const item = wasteItems[randomIndex];
-                const itemElement = document.createElement('div');
-                itemElement.classList.add('waste-item');
-                itemElement.style.backgroundImage = `url('${item.image}')`;
-                itemElement.setAttribute('data-name', item.name); // Set data-name attribute
-                itemElement.addEventListener('click', () => {
-                    if (item.recyclable) {
-                        removeMatchingItems(itemElement);
-                    } else {
-                // Do nothing for non-recyclable items
-                    }
-                });
-        gameBoard.appendChild(itemElement);
-            }
-        }
+    function selectRandomWord() {
+        return words[currentWordIndex++];
+    }
 
-        function removeMatchingItems(clickedItem) {
-            const itemsToRemove = [];
-            const itemIndex = Array.from(gameBoard.children).indexOf(clickedItem);
-            const itemRow = Math.floor(itemIndex / 6);
-            const itemCol = itemIndex % 6;
-            const clickedItemName = clickedItem.getAttribute('data-name');
+    function scrambleWord(word) {
+        return word.replace(/\s/g, '').split('').sort(function() { return 0.5 - Math.random() }).join('');
+    }
 
-            // Check for items in the same row
-            for (let i = 0; i < 6; i++) {
-                const index = itemRow * 6 + i;
-                const item = gameBoard.children[index];
-                if (item && item.getAttribute('data-name') === clickedItemName) {
-                    itemsToRemove.push(item);
-                }
-            }
+    function displayScrambledWord() {
+        currentWord = selectRandomWord();
+        scrambledWord = scrambleWord(currentWord);
+        let hint = '';
+        let wordsArray = currentWord.split(' ');
+        wordsArray.forEach((word) => {
+            hint += '_ '.repeat(word.length) + '- ';
+        });
+        hint = hint.slice(0, -2); // Remove the last space and hyphen
+        document.getElementById('scrambled-word').textContent = scrambledWord;
+        document.getElementById('hint').textContent = hint;
+        document.getElementById('user-input').value = ''; // Clear the user input
+    }
 
-            // Check for items in the same column
-            for (let i = 0; i < 6; i++) {
-                const index = i * 6 + itemCol;
-                const item = gameBoard.children[index];
-                if (item && item.getAttribute('data-name') === clickedItemName) {
-                    itemsToRemove.push(item);
-                }
-            }
-
-            // Remove the items after removing the click event listener
-            itemsToRemove.forEach(itemToRemove => {
-                itemToRemove.removeEventListener('click', itemToRemove.clickEvent);
+    function checkGuess() {
+        const userInput = document.getElementById('user-input').value.toUpperCase();
+        if (userInput === currentWord) {
+            document.getElementById('result').textContent = 'Correct!';
+            if (currentWordIndex < words.length) {
                 setTimeout(() => {
-                    itemToRemove.style.backgroundImage = "url('')";
-                    setTimeout(() => {
-                        itemToRemove.remove();
-                        refillGameBoard();
-                        checkRemainingItems();
-                    }, 1000); // Display as empty for 1 second
-                }, 1000); // Display as empty for 1 second
-            });
-        }
-
-
-
-
-
-        let isRefilling = false;
-
-        function refillGameBoard() {
-            if (isRefilling) return; // Exit early if already refilling
-            isRefilling = true;
-
-            const remainingItems = document.querySelectorAll('.waste-item');
-            const emptySlots = 36 - remainingItems.length;
-            const promises = [];
-
-            for (let i = 0; i < emptySlots; i++) {
-                const randomIndex = Math.floor(Math.random() * wasteItems.length);
-                const item = wasteItems[randomIndex];
-                const itemElement = document.createElement('div');
-                itemElement.classList.add('waste-item');
-                itemElement.style.backgroundImage = `url('${item.image}')`;
-                itemElement.setAttribute('data-name', item.name);
-                itemElement.addEventListener('click', () => {
-                    if (item.recyclable) {
-                        removeMatchingItems(itemElement);
-                    } else {
-                        // Do nothing for non-recyclable items
-                    }
-                });
-                gameBoard.appendChild(itemElement);
-                promises.push(new Promise(resolve => itemElement.onload = resolve));
+                    displayScrambledWord();
+                    document.getElementById('result').textContent = '';
+                }, 1000);
+            } else {
+                document.getElementById('result').textContent = 'All words completed!';
             }
-
-            // Wait for all images to load before resetting the flag
-            Promise.all(promises).then(() => {
-                isRefilling = false;
-            });
+        } else {
+            document.getElementById('result').textContent = 'Incorrect. Try again.';
         }
-        function checkRemainingItems() {
-            const remainingItems = document.querySelectorAll('.waste-item');
-            const allNonRecyclable = Array.from(remainingItems).every(item => {
-                const itemName = item.getAttribute('data-name');
-                return !wasteItems.find(wasteItem => wasteItem.name === itemName).recyclable;
-            });
+    }
 
-            if (allNonRecyclable) {
-                window.location.href = 'https://example.com'; // Redirect to another page
-            }
-        }
-
-
-        createGameBoard();
-    </script>
+    displayScrambledWord();
+</script>
 </body>
-
 </html>
