@@ -8,7 +8,9 @@
     <style>
         body {
             font-family: 'Trebuchet MS', sans-serif;
-            background-image: url('Images/Level 2/green.jpg');
+            background-image: url('Images/Level 4/land.png');
+            background-color: rgba(0, 0, 0, 0.342);
+            background-blend-mode: darken;
             background-size: cover;
             background-repeat: no-repeat;
             margin: 0;
@@ -81,10 +83,36 @@
         .score-timer-container span {
             margin: 5px 0;
         }
+
+        #player.flipped {
+            transform: scaleX(-1);
+        }
+
+        .cloud {
+            width:30%;
+            height: auto;
+            position: fixed;
+            top: 20px;
+            right: 1px;
+            animation: moveAndScale 60s linear infinite;
+            opacity: 50%;
+        }
+
+        @keyframes moveAndScale {
+            0% {
+                left: 0;
+            }
+
+            100% {
+                left: calc(100% - 100px);
+            }
+        }
+
     </style>
 </head>
 
 <body>
+    <img id="cloud" class="cloud" src="Images/Level 4/cloud.png">
     <div class="score-timer-container">
         <span id="score">Score: <span id="score-value">0</span></span>
         <span id="penalty">Penalty: <span id="penalty-value">0</span></span>
@@ -100,8 +128,8 @@
         style="top: 750px; left: 500px; height: 100px; width: 100px;">
     <img id="waste4" src="Images/Level 2/package.png" class="waste-item" data-type="non-recyclable" title="Package"
         style="top: 480px; left: 150px;height: 100px; width: 100px;">
-    <img id="waste5" src="Images/Level 2/plasticbag.png" class="waste-item" data-type="recyclable"
-        title="Plastic Bag" style="top: 100px; left: 1000px; height: 70px; width: 70px;">
+    <img id="waste5" src="Images/Level 2/plasticbag.png" class="waste-item" data-type="recyclable" title="Plastic Bag"
+        style="top: 100px; left: 1000px; height: 70px; width: 70px;">
     <img id="waste6" src="Images/Level 2/plasticpack.png" class="waste-item" data-type="non-recyclable"
         title="Plastic Pack" style="top: 150px; left: 1420px; height: 60px; width: 60px;">
     <img id="waste7" src="Images/Level 2/glass.png" class="waste-item" data-type="recyclable" title="Glass"
@@ -109,17 +137,17 @@
     <img id="waste8" src="Images/Level 2/paper bag.png" class="waste-item" data-type="recyclable" title="Paper Bag"
         style="top: 470px; left: 1300px; height: 60px; width: 60px;">
 
-    <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable-bin">
-    <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image"
-        data-type="non-recyclable-bin">
-
+    <img id="recyclable-bin" src="Images/Level 2/recyclable_bin.png" class="bin-image" data-type="recyclable-bin" style="top: 700px; left: 250px; height: 200px; width: 200px;">
+    <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image" data-type="non-recyclable-bin"
+    style="top: 500px; left: 830px; height: 150px; width: 150px;">
+        
     <script>
-    let countdown = 60;
-    let score = 0;
-    let penalty = 0;
-    let playerPosition = { x: 50, y: window.innerHeight - 250 }; // Updated initial position to lower left corner
-    let carryingWaste = null;
-    const playerSpeed = 10;
+        let countdown = 60;
+        let score = 0;
+        let penalty = 0;
+        let playerPosition = { x: 50, y: 50 }; // Updated initial position to top-left corner
+        let carryingWaste = null;
+        const playerSpeed = 10;
 
         const timerInterval = setInterval(updateTimer, 1000);
 
@@ -155,16 +183,26 @@
         function movePlayer(keyCode) {
             switch (keyCode) {
                 case 37: // Left arrow
-                    playerPosition.x -= playerSpeed;
+                    if (playerPosition.x - playerSpeed >= 0) { // Check if moving left will keep the player within the window
+                        playerPosition.x -= playerSpeed;
+                        document.getElementById('player').classList.add('flipped');
+                    }
                     break;
                 case 38: // Up arrow
-                    playerPosition.y -= playerSpeed;
+                    if (playerPosition.y - playerSpeed >= 0) { // Check if moving up will keep the player within the window
+                        playerPosition.y -= playerSpeed;
+                    }
                     break;
                 case 39: // Right arrow
-                    playerPosition.x += playerSpeed;
+                    if (playerPosition.x + playerSpeed + 150 <= window.innerWidth) { // Check if moving right will keep the player within the window
+                        playerPosition.x += playerSpeed;
+                        document.getElementById('player').classList.remove('flipped');
+                    }
                     break;
                 case 40: // Down arrow
-                    playerPosition.y += playerSpeed;
+                    if (playerPosition.y + playerSpeed + 190 <= window.innerHeight) { // Check if moving down will keep the player within the window
+                        playerPosition.y += playerSpeed;
+                    }
                     break;
             }
             document.getElementById('player').style.left = playerPosition.x + 'px';
@@ -230,6 +268,7 @@
                 collectWaste();
             }
         });
+
     </script>
 </body>
 

@@ -24,9 +24,9 @@
 
                 <div id="form_content_container">
                     <div id="form_content_inner_container">
-                        <input type="text" id="full_name" placeholder="Full name">
+                        <input type="text" id="full_name" placeholder="Full Name">
                         <input type="email" id="email" placeholder="Email">
-                        <input type="password" id="password" placeholder="New Password">
+                        <input type="password" id="password" placeholder="Password">
 
                         
 
@@ -42,6 +42,15 @@
                 </div>
             </div>
         </div>
+        <script>
+            function check(){
+                if(localStorage.getItem("token")){
+                    window.location.href = 'choose level.html';
+                }
+            }
+            window.onload = check;
+
+        </script>
     </body>
 
 

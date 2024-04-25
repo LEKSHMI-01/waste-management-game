@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Levels</title>
+    
     <style>
         body {
             font-family: 'Trebuchet MS', sans-serif;
@@ -162,7 +163,8 @@
             padding: 10px 20px;
             font-size: 16px;
             border-radius: 8px;
-            background-color: #3498db;
+            font-family: 'Trebuchet MS', sans-serif;
+            background-color: #51bc00;;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
@@ -172,6 +174,7 @@
             background-color: #2980b9;
         }
     </style>
+
 </head>
 
 <body>
@@ -191,19 +194,21 @@
             <button class="level-button" onclick="startLevel4()" id="level4" disabled>Level 4</button>
         </div>
     </div>
+    <script src="login.js"></script>
 
-    <script>
+    <script >
         var unlockedLevels = 1; // Initially, only Level 1 is unlocked
 
         // Function to redirect to the login page
         function goToLogin() {
+            localStorage.clear()
             window.location.href = 'login.html';
         }
 
         const urlParams = new URLSearchParams(window.location.search);
         const myparam = urlParams.get('level1');
 
-        console.log(myparam)
+       // console.log(myparam)
 
         if (myparam === 'completed') completeLevel1()
 
@@ -211,7 +216,7 @@
         const urlParamss = new URLSearchParams(window.location.search);
         const myparamm = urlParams.get('level2');
 
-        console.log(myparamm)
+        //console.log(myparamm)
 
         if (myparamm === 'completed') completeLevel2()
 
@@ -220,7 +225,7 @@
         const urlParamsss = new URLSearchParams(window.location.search);
         const myparammm = urlParams.get('level3');
 
-        console.log(myparammm)
+       // console.log(myparammm)
 
         if (myparammm === 'completed') completeLevel3()
 
@@ -267,6 +272,20 @@
         function startLevel4() {
             window.location.href = 'levelfourindro.html';
         }
+        
+    // Define your function to be called on page load
+    function onPageLoad() {
+        console.log("duyoooof")
+
+        if(localStorage.getItem("token")){
+            bla=checkLevel()
+            console.log(bla,"duyoooof")
+        }
+    }
+
+    window.onload = onPageLoad;
+     
+
     </script>
 
 </body>

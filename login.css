@@ -3,6 +3,7 @@ body {
     width: 100%;
     height: 100%;
     background: url(Images/bc1.jpg) no-repeat center center fixed;
+    font-family: 'Trebuchet MS', sans-serif;
     background-blend-mode: darken;
     background-color: rgba(0, 0, 0, 0.7);
     background-size: cover;
@@ -62,6 +63,7 @@ body {
 }
 
 #form_content_container {
+    font-family: 'Trebuchet MS', sans-serif;
     width: 100%;
     height: 90%;
     float: left;
@@ -91,6 +93,7 @@ input {
     border-top-left-radius: 2%;
     border-top-right-radius: 2%;
     border-image: linear-gradient(45deg, #4FC3F7, #81C784) 1;
+    
 }
 
 #button_container {

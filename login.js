@@ -47,12 +47,15 @@ firebase.initializeApp(firebaseConfig);
       var user_data = {
         email : email,
         full_name : full_name,
-        last_login : Date.now()
+        last_login : Date.now(),
+        password:password,
+        level:0
       }
   
       // Push to Firebase Database
       database_ref.child('users/' + user.uid).set(user_data)
-  
+      localStorage.setItem("token",user.uid)
+
       // DOne
       alert('User Created!!')
     })
@@ -94,6 +97,8 @@ firebase.initializeApp(firebaseConfig);
         // Push to Firebase Database
         database_ref.child('users/' + user.uid).update(user_data)
   
+      localStorage.setItem("token",user.uid)
+
         // Redirect to choose level.html
         window.location.href = 'choose level.html';
   
@@ -107,6 +112,37 @@ firebase.initializeApp(firebaseConfig);
       })
   }
   
+  function checkLevel(){
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEj68XIeUMvlpEMCCV99Dun-0JqVxxV9M",
+      authDomain: "waste-management-9400f.firebaseapp.com",
+      projectId: "waste-management-9400f",
+      storageBucket: "waste-management-9400f.appspot.com",
+      messagingSenderId: "472181040401",
+      appId: "1:472181040401:web:de64ba1caa3911181f98b0"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    
+    
+      // Initialize variables
+      const database = firebase.database()
+      
+     // Change 'users' to your actual node name
+console.log("000")
+     database.ref('users/' + localStorage.getItem("token")).once('value').then(function(snapshot) {
+        if (snapshot.exists()) {
+            const docData = snapshot.val();
+            console.log("Document data:", docData);
+           return docData
+        } else {
+            console.log("No such document!");
+        }
+    }).catch(function(error) {
+        console.error("Error getting document:", error);
+    })  
+  }
   
   // Validate Functions
   function validate_email(email) {

@@ -420,7 +420,7 @@
                 qValue[action] = qValue[action] || 0;
                 const maxNextQValue = Math.max(...Object.values(qValue));
                 qValue[action] += alpha * (reward + gamma * maxNextQValue - qValue[action]);
-
+            
                 // Store the updated Q-value for the current state-action pair
                 localStorage.setItem(state, JSON.stringify(qValue));
             }
