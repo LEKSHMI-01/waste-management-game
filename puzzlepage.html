@@ -6,48 +6,163 @@
 <title>Word Scramble Game</title>
 <style>
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
         text-align: center;
+        background: url('Images/intro4/bc1.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-color: rgba(0, 0, 0, 0.849);
+        background-blend-mode: darken;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #f4f4f9;
     }
 
-    #word {
-        font-size: 24px;
-        margin-bottom: 20px;
+    .container {
+        background-color: rgba(5, 5, 5, 0.7);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px;
+    }
+    .level4 {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+    .logo {
+            width: 150px;
+            height: auto;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            animation: wiggle 4s linear infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            7% {
+                transform: rotateZ(0);
+            }
+
+            15% {
+                transform: rotateZ(-15deg);
+            }
+
+            20% {
+                transform: rotateZ(10deg);
+            }
+
+            25% {
+                transform: rotateZ(-10deg);
+            }
+
+            30% {
+                transform: rotateZ(6deg);
+            }
+
+            35% {
+                transform: rotateZ(-4deg);
+            }
+
+            40%,
+            100% {
+                transform: rotateZ(0);
+            }
+        }
+
+    h1 {
+        color: #e0e1dd;
+        margin-bottom: 0.5em;
     }
 
-    #scrambled-word {
-        font-size: 24px;
-        margin-bottom: 20px;
+    #scrambled-word, #word {
+        font-size: 28px;
+        color: #FF6347; /* Tomato color for better visibility */
+        margin-bottom: 15px;
     }
 
     #hint {
+        font-size: 20px;
+        color: #c7c9c8;
+        margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        width: 100%;
         font-size: 18px;
+        border: 2px solid #555;
+        border-radius: 8px;
+        box-sizing: border-box;
+        color: #333;
+        background-color: #fff;
         margin-bottom: 10px;
     }
 
     button {
-        padding: 10px 20px;
-        font-size: 16px;
+        padding: 12px 25px;
+        font-size: 18px;
+        background-color: #32CD32; /* Lime Green */
+        color: #fff;
+        border: none;
+        border-radius: 8px;
         cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #228B22; /* Forest Green */
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(1px);
+    }
+
+    #result {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    #result.correct {
+        color: #32CD32;
+    }
+
+    #result.incorrect {
+        color: #FF6347;
     }
 </style>
 </head>
 <body>
-<h1>Word Scramble Game</h1>
-<p>Unscramble the word:</p>
-<div id="scrambled-word"></div>
-<p id="hint"></p>
-<input type="text" id="user-input" placeholder="Your guess..." style="letter-spacing: 2px;">
-<button onclick="checkGuess()">Check</button>
-<p id="result"></p>
+    <img src="Images/LogoR.png" alt="Green Gamify Logo" class="logo">
+    <img src="Images/Level 4/level4.png" alt="Green Gamify Logo" class="level4">
+<div class="container">
+    <h1>Word Scramble Game</h1>
+    <p>Unscramble the word:</p>
+    <div id="scrambled-word"></div>
+    <p id="hint"></p>
+    <input type="text" id="user-input" placeholder="Your guess..." autocomplete="off"><br>
+    <button onclick="checkGuess()">Check</button>
+    <p id="result"></p>
+</div>
 
 <script>
-    const words = ['WHEAT STRAW', 'LDPE COVER', 'CHEMICALS', 'BATTERY','PAPER WASTE', 'PET BOTTLES', 'E-WASTE', 'COSMETICS', 'FOOD WASTE', 'PLASTIC MEDICAL', 'PESTICIDES', 'ALGAE'];
+    const words = ['WHEAT STRAW', 'LDPE COVER', 'CHEMICALS', 'BATTERY', 'PAPER WASTE', 'PET BOTTLES', 'E-WASTE', 'COSMETICS', 'FOOD WASTE', 'PLASTIC MEDICAL', 'PESTICIDES', 'ALGAE'];
     let currentWordIndex = 0;
     let currentWord = '';
     let scrambledWord = '';
 
     function selectRandomWord() {
+        if (currentWordIndex >= words.length) currentWordIndex = 0; // Reset if we're at the end
         return words[currentWordIndex++];
     }
 
@@ -61,9 +176,9 @@
         let hint = '';
         let wordsArray = currentWord.split(' ');
         wordsArray.forEach((word) => {
-            hint += '_ '.repeat(word.length) + '- ';
+            hint += '_ '.repeat(word.length) + ' ';
         });
-        hint = hint.slice(0, -2); // Remove the last space and hyphen
+        hint = hint.trim(); // Trim the final extra space
         document.getElementById('scrambled-word').textContent = scrambledWord;
         document.getElementById('hint').textContent = hint;
         document.getElementById('user-input').value = ''; // Clear the user input
@@ -73,16 +188,12 @@
         const userInput = document.getElementById('user-input').value.toUpperCase();
         if (userInput === currentWord) {
             document.getElementById('result').textContent = 'Correct!';
-            if (currentWordIndex < words.length) {
-                setTimeout(() => {
-                    displayScrambledWord();
-                    document.getElementById('result').textContent = '';
-                }, 1000);
-            } else {
-                document.getElementById('result').textContent = 'All words completed!';
-            }
+            document.getElementById('result').className = 'correct';
+            setTimeout(displayScrambledWord, 1000);
+            setTimeout(() => { document.getElementById('result').textContent = ''; }, 1000);
         } else {
             document.getElementById('result').textContent = 'Incorrect. Try again.';
+            document.getElementById('result').className = 'incorrect';
         }
     }
 
