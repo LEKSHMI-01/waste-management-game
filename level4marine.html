@@ -102,7 +102,11 @@
     </style>
 </head>
 
-<body>
+<body onclick="playBackgroundMusic()">
+    <audio id="background-music">
+        <source src="Music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <div class="score-timer-container">
         <span id="score">Score: <span id="score-value">0</span></span>
         <span id="penalty">Penalty: <span id="penalty-value">0</span></span>
@@ -131,6 +135,11 @@
     <img id="non-recyclable-bin" src="Images/Level 4/subnore.png" class="bin-image" data-type="non-recyclable-bin">
 
     <script>
+        function playBackgroundMusic() {
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
+        }
+
         let countdown = 60;
         let score = 0;
         let penalty = 0;

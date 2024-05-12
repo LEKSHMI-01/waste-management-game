@@ -184,7 +184,11 @@
     </style>
 </head>
 
-<body>
+<body onclick="playBackgroundMusic()">
+    <audio id="background-music">
+        <source src="Music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <img src="Images/Level 3/logolevel3.png" alt="Green Gamify Logo" class="logo">
     <div class="name"> ' EcoSort ' </div>
@@ -262,6 +266,11 @@
     <div id="popup-container"></div>
 
     <script>
+        function playBackgroundMusic() {
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const wastes = document.querySelectorAll('.waste');
             const piles = document.querySelectorAll('.pile');

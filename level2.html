@@ -96,7 +96,11 @@
     </style>
 </head>
 
-<body>
+<body onclick="playBackgroundMusic()">
+    <audio id="background-music">
+        <source src="Music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <div class="score-timer-container">
         <span id="score">Score: <span id="score-value">0</span></span>
         <span id="timer">Time: <span id="countdown">40</span> seconds</span>
@@ -125,32 +129,37 @@
     <img id="non-recyclable-bin" src="Images/Level 2/non_recyclable_bin.png" class="bin-image" ondrop="drop(event)"
         ondragover="allowDrop(event)" data-type="non-recyclable" alt="Non-Recyclable Bin">
 
-        <script>
-            let countdown = 40; // Initial countdown time in seconds
-            let score = 0; // Initial score
-        
-            // Function to update the countdown timer
-            function updateTimer() {
-                countdown--;
-                document.getElementById('countdown').textContent = countdown;
-                if (countdown <= 0) {
-                    clearInterval(timerInterval); // Stop the timer when it reaches 0
-                    if (score >= 80) {
-                        //alert('Time is up! Congratulations! You completed Level 2. Your score is ' + score);
-                        // Redirect to Complete1.html after a delay
-                        
-                        setTimeout(() => {
-                            window.location.href = '2congratulations.html?score=' + score;
-                        }, 1000);
-                    } else {
-                        //alert('Time is up! Try again. Your score is ' + score);
-                        window.location.href = '2try_again.html?score=' + score;
-                    }
+    <script>
+        function playBackgroundMusic() {
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
+        }
+
+        let countdown = 40; // Initial countdown time in seconds
+        let score = 0; // Initial score
+
+        // Function to update the countdown timer
+        function updateTimer() {
+            countdown--;
+            document.getElementById('countdown').textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timerInterval); // Stop the timer when it reaches 0
+                if (score >= 80) {
+                    //alert('Time is up! Congratulations! You completed Level 2. Your score is ' + score);
+                    // Redirect to Complete1.html after a delay
+
+                    setTimeout(() => {
+                        window.location.href = '2congratulations.html?score=' + score;
+                    }, 1000);
+                } else {
+                    //alert('Time is up! Try again. Your score is ' + score);
+                    window.location.href = '2try_again.html?score=' + score;
                 }
             }
-        
-            // Function to update the score
-            function updateScore() {
+        }
+
+        // Function to update the score
+        function updateScore() {
             score += 10; // Increase score by 10 for each correct placement
             document.getElementById('score-value').textContent = score;
 
@@ -160,79 +169,79 @@
                 window.location.href = '2congratulations.html?score=' + score;
             }
         }
-        
-            // Timer interval that calls updateTimer every second
-            const timerInterval = setInterval(updateTimer, 1000);
-        
-            function allowDrop(event) {
-                event.preventDefault();
-            }
-        
-            function drag(event) {
-                event.dataTransfer.setData("text", event.target.id);
-                event.dataTransfer.setData("type", event.target.dataset.type);
-            }
-        
-            function drop(event) {
-                event.preventDefault();
-                const draggedElementId = event.dataTransfer.getData("text");
-                const draggedElementType = event.dataTransfer.getData("type");
-                const binType = event.target.dataset.type;
-        
-                let message;
-                let imageSrc;
-        
-                if (draggedElementType === binType) {
-                    //message = Correct! You dropped the waste in the ${binType} bin 😎.;
-                    imageSrc = 'Images/Level 2/10.png';
-                    updateScore(); // Update the score
-                    // Remove the dropped waste item from the DOM
-                    const droppedElement = document.getElementById(draggedElementId);
-                    droppedElement.parentNode.removeChild(droppedElement);
-        
-                    // Check if all waste items are sorted
-                    if (document.querySelectorAll('.waste-item').length === 0) {
-                        // Redirect to Completed.html after a delay
-                        setTimeout(() => {
-                            window.location.href = '2Complete.html';
-                        }, 3000);
-                    }
-                } else {
-                    //message = Oops! The waste has been dropped in the ${binType} bin 😒.;
-                    imageSrc = 'Images/Level 2/sad.png';
+
+        // Timer interval that calls updateTimer every second
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+            event.dataTransfer.setData("type", event.target.dataset.type);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const draggedElementId = event.dataTransfer.getData("text");
+            const draggedElementType = event.dataTransfer.getData("type");
+            const binType = event.target.dataset.type;
+
+            let message;
+            let imageSrc;
+
+            if (draggedElementType === binType) {
+                //message = Correct! You dropped the waste in the ${binType} bin 😎.;
+                imageSrc = 'Images/Level 2/10.png';
+                updateScore(); // Update the score
+                // Remove the dropped waste item from the DOM
+                const droppedElement = document.getElementById(draggedElementId);
+                droppedElement.parentNode.removeChild(droppedElement);
+
+                // Check if all waste items are sorted
+                if (document.querySelectorAll('.waste-item').length === 0) {
+                    // Redirect to Completed.html after a delay
+                    setTimeout(() => {
+                        window.location.href = '2Complete.html';
+                    }, 3000);
                 }
-        
-                // Show message
-                /*const popup = document.createElement('div');
-                popup.textContent = message;
-                popup.style.position = 'fixed';
-                popup.style.top = '50%';
-                popup.style.left = '50%';
-                popup.style.transform = 'translate(-50%, -50%)';
-                popup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                popup.style.padding = '20px';
-                popup.style.border = '1px solid #000';
-                popup.style.borderRadius = '10px';
-                document.body.appendChild(popup);*/
-        
-                // Show image
-                const image = document.createElement('img');
-                image.src = imageSrc;
-                image.style.position = 'fixed';
-                image.style.top = '60%';
-                image.style.left = '50%';
-                image.style.transform = 'translate(-50%, -50%)';
-                image.style.width = '100px';
-                image.style.height = '100px';
-                document.body.appendChild(image);
-        
-                // Remove popup and image after 2 seconds
-                setTimeout(() => {
-                    //popup.remove();
-                    image.remove();
-                }, 2000);
+            } else {
+                //message = Oops! The waste has been dropped in the ${binType} bin 😒.;
+                imageSrc = 'Images/Level 2/sad.png';
             }
-        </script>
+
+            // Show message
+            /*const popup = document.createElement('div');
+            popup.textContent = message;
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            popup.style.padding = '20px';
+            popup.style.border = '1px solid #000';
+            popup.style.borderRadius = '10px';
+            document.body.appendChild(popup);*/
+
+            // Show image
+            const image = document.createElement('img');
+            image.src = imageSrc;
+            image.style.position = 'fixed';
+            image.style.top = '60%';
+            image.style.left = '50%';
+            image.style.transform = 'translate(-50%, -50%)';
+            image.style.width = '100px';
+            image.style.height = '100px';
+            document.body.appendChild(image);
+
+            // Remove popup and image after 2 seconds
+            setTimeout(() => {
+                //popup.remove();
+                image.remove();
+            }, 2000);
+        }
+    </script>
 </body>
 
 </html>

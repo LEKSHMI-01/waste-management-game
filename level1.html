@@ -34,22 +34,16 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-       
-
         #waste-list {
             flex: 1;
             padding: 45px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            /* 4 columns */
             grid-gap: 20px 4px;
-            /* Adjusted gap between images */
             align-items: center;
             justify-content: center;
             border: 2px solid #0c461fce;
-            /* Added border for the waste images box */
             border-radius: 10px;
-            /* Added border radius for a rounded look */
         }
 
         .bin-container {
@@ -66,7 +60,6 @@
 
         .bin-image {
             width: 200px;
-            /* Adjust the size of the bin images */
             height: auto;
         }
 
@@ -87,7 +80,6 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-top: 5px;
-            
         }
 
         .recyclable-label {
@@ -101,7 +93,13 @@
 </head>
 
 <body>
-    <div id="game-container">
+    
+    <audio id="background-music">
+        <source src="Music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="game-container" onclick="playBackgroundMusic()">
         <div id="waste-list">
             <img id="waste1" src="Images/l1plastic bottle.jpg" class="waste-item" draggable="true"
                 ondragstart="drag(event)" data-type="recyclable" title="Plastic Bottle">
@@ -142,6 +140,11 @@
         </div>
     </div>
     <script>
+        function playBackgroundMusic() {
+            const backgroundMusic = document.getElementById('background-music');
+            backgroundMusic.play();
+        }
+
         function allowDrop(event) {
             event.preventDefault();
         }
